@@ -2,4 +2,7 @@ This is a very simple PDF exporter for MyFlightbook.com.
 
 It processes MyFlightbook's CSV files and turns them into a LateX file. The code is meant to be integrated into the website (although it can run just fine stand-alone at the moment). Some changes are needed during integration depending on the server setup, so consider this to be a preliminary version.
 
-NOTE: Due to what's mentioned above, the CSV file name is hardcoded to sample_export.csv.
+Usage:
+logbook.py <CSV file>
+
+<CSV file> is the name of the exported CSV file from Myflightbook.com. Output is sent to stdout as LateX code. Use pdfLatex to generate a PDF.

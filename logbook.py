@@ -127,7 +127,11 @@ class Copier:
 # Number of flights to include on a single page
 RowsPerPage = 12
 
-with open('sample_export.csv') as csvfile:
+if len(sys.argv) != 2:
+    print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
+    exit()
+
+with open(sys.argv[1]) as csvfile:
     # TODO: Check if this collides with memory requirements (need to check
     #       if the biggest logbook still fits easily into working memory)
     # TODO: Proper error handling if CSV is not available.
