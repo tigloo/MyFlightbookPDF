@@ -115,26 +115,15 @@ class Copier:
         self.outf = file(outname, 'w')
         self.copyblock()
 
-    def copyout(self, filename):
-        self.globals['_bl'] = file(filename).readlines()
+    def copyout(self, template):
+        self.globals['_bl'] = file(template).readlines()
         self.outf = sys.stdout
         self.copyblock()
 #
 # YAPTU snippet end
 #
 
-#---------------------------------------------------------------------
-# Number of flights to include on a single page
-RowsPerPage = 12
-
-if len(sys.argv) != 2:
-    print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
-    exit()
-
-with open(sys.argv[1]) as csvfile:
-    # TODO: Check if this collides with memory requirements (need to check
-    #       if the biggest logbook still fits easily into working memory)
-    # TODO: Proper error handling if CSV is not available.
+def csvToTex(csvfile):
     reader = csv.DictReader(csvfile)
     rows = list(reader)
 
@@ -171,3 +160,14 @@ with open(sys.argv[1]) as csvfile:
     # Read template and process it, output will be sent to stdout
     copier = Copier(globals())
     copier.copyout('logbook_template.tex.py')
+
+#---------------------------------------------------------------------
+# Number of flights to include on a single page
+RowsPerPage = 12
+
+if len(sys.argv) != 2:
+    print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
+    exit()
+
+with open(sys.argv[1]) as csvfile:
+    csvToTex(csvfile)
