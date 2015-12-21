@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>Logbook Compiler</title>
+</head>
+<body>
+  <h1>Myflightbook.com Logbook to PDF Compiler</h1>
+ 
+  <main role="main">
+  <h2>Upload your logbook in CSV format</h2>
+  <form action="/compile" method="post" enctype="multipart/form-data">
+    <p>
+       Choose the CSV file from your computer:<br> 
+       <input name="csvfile" type="file" size="50" accept="text/*"> 
+    </p>
+    <button type="button">Create PDF</button>
+  </form>
+  </main>
+</body>
+</html>
+

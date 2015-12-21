@@ -5,8 +5,8 @@ import tempfile
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
-	return 'Hello World!'
+def root():
+	return app.send_static_file('mainform.html')
 
 @app.route('/compile', methods=['POST'])
 def compile():
