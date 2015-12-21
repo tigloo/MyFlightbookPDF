@@ -30,7 +30,13 @@
 \renewcommand{\arraystretch}{3.2}
 
 #[
+#---------------------------------------------------------------------
+# Number of flights to include on a single page
+RowsPerPage = 12
+#---------------------------------------------------------------------
+
 currentRowInTable = 0
+
 totalCategoryLastPage = {}
 totalDayLandingsLastPage = 0
 totalNightLandingsLastPage = 0

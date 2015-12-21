@@ -115,15 +115,24 @@ class Copier:
         self.outf = file(outname, 'w')
         self.copyblock()
 
-    def copyout(self, template):
+    def copyout(self, template, outfile):
         self.globals['_bl'] = file(template).readlines()
-        self.outf = sys.stdout
+        self.outf = outfile
         self.copyblock()
 #
 # YAPTU snippet end
 #
 
-def csvToTex(csvfile):
+#---------------------------------------------------------------------
+# Define global variables to be used by the template
+#---------------------------------------------------------------------
+# Buffer for individual CSV rows
+rows = []
+#---------------------------------------------------------------------
+
+def csvToTex(csvfile, outfile):
+    global rows
+
     reader = csv.DictReader(csvfile)
     rows = list(reader)
 
@@ -159,15 +168,11 @@ def csvToTex(csvfile):
 
     # Read template and process it, output will be sent to stdout
     copier = Copier(globals())
-    copier.copyout('logbook_template.tex.py')
+    copier.copyout('logbook_template.tex.py', outfile)
 
-#---------------------------------------------------------------------
-# Number of flights to include on a single page
-RowsPerPage = 12
-
-if len(sys.argv) != 2:
-    print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
-    exit()
-
-with open(sys.argv[1]) as csvfile:
-    csvToTex(csvfile)
+#if len(sys.argv) != 2:
+#    print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
+#    exit()
+#
+#with open(sys.argv[1]) as csvfile:
+#    csvToTex(csvfile)
