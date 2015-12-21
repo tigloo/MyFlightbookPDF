@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def root():
-	return app.send_from_directory('','mainform.html')
+	return app.send_file('mainform.html')
 
 @app.route('/compile', methods=['POST'])
 def compile():
