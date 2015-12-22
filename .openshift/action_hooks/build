@@ -1,6 +1,6 @@
 echo Downloading texlive...
 mkdir $OPENSHIFT_REPO_DIR/texlive
-curl -o $OPENSHIFT_REPO_DIR/texlive/master.zip https://github.com/tigloo/openshift-origin-cartridge-texlive/archive/master.zip
+curl -L -o $OPENSHIFT_REPO_DIR/texlive/master.zip https://github.com/tigloo/openshift-origin-cartridge-texlive/archive/master.zip
 cd $OPENSHIFT_REPO_DIR/texlive
 unzip $OPENSHIFT_REPO_DIR/texlive/master.zip
 rm $OPENSHIFT_REPO_DIR/texlive/master.zip
