@@ -1,0 +1,3 @@
+[submodule "texlive"]
+	path = texlive
+	url = https://github.com/tigloo/openshift-origin-cartridge-texlive.git
