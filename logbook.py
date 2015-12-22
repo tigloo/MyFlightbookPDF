@@ -117,6 +117,7 @@ class Copier:
 
     def copyout(self, template, outfile):
         self.globals['_bl'] = file(template).readlines()
+        self.globals['_outf'] = outfile
         self.outf = outfile
         self.copyblock()
 #

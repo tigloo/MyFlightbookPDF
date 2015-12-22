@@ -83,7 +83,7 @@ for i in range(RowsPerPage):
 
     if currentRowInTable >= len(rows):
         # We exceeded the logbook, so print an empty line to fill the table properly
-        print(' & & & & & & & & & & & & & & & & & & & & & & \\\\')
+        _outf.write(' & & & & & & & & & & & & & & & & & & & & & & \\\\')
     else:
         # The CSV export contains different date formats, so parse them individually
         logDate = datetime.datetime.strptime(rows[currentRowInTable]['Date'], '%m/%d/%Y')
@@ -120,7 +120,7 @@ for i in range(RowsPerPage):
         totalDualThisPage += timeDual
         totalCFIThisPage += timeCFI
 
-        print('%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & & & & %s %s \\\\' % (currentRowInTable+1,
+        _outf.write('%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & & & & %s %s \\\\' % (currentRowInTable+1,
             logDate.date().isoformat(), departureCode,
             rows[currentRowInTable]['Engine Start'], arrivalCode,
             rows[currentRowInTable]['Engine End'],
@@ -138,7 +138,7 @@ for i in range(RowsPerPage):
             rows[currentRowInTable]['Flight Properties'],
             rows[currentRowInTable]['Comments']))
 
-    print '\hline'
+    _outf.write('\hline')
 
     currentRowInTable += 1
 #]
@@ -176,11 +176,11 @@ for category in totalCategoryThisPage:
         totalCategoryLastPage[category] = totalCategoryThisPage[category]
     categoryTotalStr += '%s: %i\\\\' % (category, totalCategoryLastPage[category])
 
-print('\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{I certify that the entries in this log are true.}} \\\\' % (categoryTotalThisPageStr, thisPageHours, thisPageMinutes, totalDayLandingsThisPage, totalNightLandingsThisPage, math.floor(totalNightThisPage), round(totalNightThisPage*60%60), math.floor(totalIMCThisPage), round(totalIMCThisPage*60%60), math.floor(totalPICThisPage), round(totalPICThisPage*60%60), math.floor(totalSICThisPage), round(totalSICThisPage*60%60), math.floor(totalDualThisPage), round(totalDualThisPage*60%60), math.floor(totalCFIThisPage), round(totalCFIThisPage*60%60)))
-print('\cline{8-19}')
-print('\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL FROM PREVIOUS PAGES & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}} \\\\' % (categoryTotalLastPageStr, lastPageHours, lastPageMinutes, totalDayLandingsLastPage, totalNightLandingsLastPage, math.floor(totalNightLastPage), round(totalNightLastPage*60%60), math.floor(totalIMCLastPage), round(totalIMCLastPage*60%60), math.floor(totalPICLastPage), round(totalPICLastPage*60%60), math.floor(totalSICLastPage), round(totalSICLastPage*60%60), math.floor(totalDualLastPage), round(totalDualLastPage*60%60), math.floor(totalCFILastPage), round(totalCFILastPage*60%60)))
-print('\cline{8-23}')
-print('\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL TIMES & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{PILOT\'S SIGNATURE}} \\\\' % (categoryTotalStr, totalHours, totalMinutes, totalDayLandings, totalNightLandings, math.floor(totalNight), round(totalNight*60%60), math.floor(totalIMC), round(totalIMC*60%60), math.floor(totalPIC), round(totalPIC*60%60), math.floor(totalSIC), round(totalSIC*60%60), math.floor(totalDual), round(totalDual*60%60), math.floor(totalCFI), round(totalCFI*60%60)))
+_outf.write('\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{I certify that the entries in this log are true.}} \\\\' % (categoryTotalThisPageStr, thisPageHours, thisPageMinutes, totalDayLandingsThisPage, totalNightLandingsThisPage, math.floor(totalNightThisPage), round(totalNightThisPage*60%60), math.floor(totalIMCThisPage), round(totalIMCThisPage*60%60), math.floor(totalPICThisPage), round(totalPICThisPage*60%60), math.floor(totalSICThisPage), round(totalSICThisPage*60%60), math.floor(totalDualThisPage), round(totalDualThisPage*60%60), math.floor(totalCFIThisPage), round(totalCFIThisPage*60%60)))
+_outf.write('\cline{8-19}')
+_outf.write('\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL FROM PREVIOUS PAGES & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}} \\\\' % (categoryTotalLastPageStr, lastPageHours, lastPageMinutes, totalDayLandingsLastPage, totalNightLandingsLastPage, math.floor(totalNightLastPage), round(totalNightLastPage*60%60), math.floor(totalIMCLastPage), round(totalIMCLastPage*60%60), math.floor(totalPICLastPage), round(totalPICLastPage*60%60), math.floor(totalSICLastPage), round(totalSICLastPage*60%60), math.floor(totalDualLastPage), round(totalDualLastPage*60%60), math.floor(totalCFILastPage), round(totalCFILastPage*60%60)))
+_outf.write('\cline{8-23}')
+_outf.write('\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL TIMES & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{PILOT\'S SIGNATURE}} \\\\' % (categoryTotalStr, totalHours, totalMinutes, totalDayLandings, totalNightLandings, math.floor(totalNight), round(totalNight*60%60), math.floor(totalIMC), round(totalIMC*60%60), math.floor(totalPIC), round(totalPIC*60%60), math.floor(totalSIC), round(totalSIC*60%60), math.floor(totalDual), round(totalDual*60%60), math.floor(totalCFI), round(totalCFI*60%60)))
 
 totalFlightMinutesLastPage += totalFlightMinutesThisPage
 totalDayLandingsLastPage += totalDayLandingsThisPage
