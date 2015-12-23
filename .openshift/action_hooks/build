@@ -2,8 +2,9 @@ if [ ! -d "$OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive" ]; then
   echo TeXLive: Downloading...
   curl -L -o $OPENSHIFT_REPO_DIR/texlive.zip https://github.com/tigloo/openshift-origin-cartridge-texlive/archive/master.zip
   echo TeXLive: Unpacking...
-  cd $OPENSHIFT_REPO_DIR
+  pushd $OPENSHIFT_REPO_DIR
   unzip $OPENSHIFT_REPO_DIR/texlive.zip > /dev/null
   rm $OPENSHIFT_REPO_DIR/texlive.zip
+  popd  
   echo TeXLive: Done!
 fi
