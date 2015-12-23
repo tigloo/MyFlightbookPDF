@@ -173,9 +173,10 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
     copier = Copier(copyGlobals)
     copier.copyout(templatefile, outfile)
 
-#if len(sys.argv) != 2:
-#    print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
-#    exit()
-#
-#with open(sys.argv[1]) as csvfile:
-#    csvToTex(csvfile)
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
+        exit()
+
+    with open(sys.argv[1]) as csvfile:
+        csvToTex('', csvfile, file('logbook_template.tex.py'), sys.stdout)
