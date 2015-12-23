@@ -6,6 +6,7 @@ import os
 import shutil
 from subprocess import call
 import logbook
+import sys
 import logging
 
 # This is the path to pdflatex INCLUDING a trailing slash
