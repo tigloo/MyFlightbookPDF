@@ -8,7 +8,10 @@ from subprocess import call
 import logbook
 
 # This is the path to pdflatex INCLUDING a trailing slash
-PATH_TO_PDFLATEX = ''
+PATH_TO_PDFLATEX = os.environ['OPENSHIFT_REPO_DIR'] + '/openshift-origin-cartridge-texlive/bin/x86_64/'
+if(os.path.isfile(PATH_TO_PDFLATEX + 'pdflatex') == False):
+    # Seemingly we do not run on OpenShift, so assume that pdfLateX is in the path
+    PATH_TO_PDFLATEX = ''
 
 # __file__ refers to the file settings.py 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))  # refers to application_top
@@ -54,4 +57,4 @@ def compile():
     return ''
 
 if __name__ == '__main__':
-    app.run(debug='False')
+    app.run(debug='True')
