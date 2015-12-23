@@ -8,6 +8,7 @@ from subprocess import call
 import logbook
 import sys
 import logging
+import StringIO
 
 # This is the path to pdflatex INCLUDING a trailing slash
 PATH_TO_PDFLATEX = ''
@@ -37,7 +38,8 @@ def root():
 def compile():
     if request.method == 'POST':
         # Get input file
-        inFile = request.files['csvfile']
+        inData = request.files['csvfile'].stream.read().decode('utf-8')
+        inFile = StringIO.StringIO(inData)
 
         # Create temporary directory
         tmpDir = tempfile.mkdtemp()
