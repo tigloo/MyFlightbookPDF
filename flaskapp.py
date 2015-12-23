@@ -30,6 +30,8 @@ def root():
 @app.route('/compile', methods=['POST'])
 def compile():
     if request.method == 'POST':
+        return '%spdflatex' % (PATH_TO_PDFLATEX)
+
         # Get input file
         inFile = request.files['csvfile']
 
@@ -54,7 +56,6 @@ def compile():
 
         shutil.rmtree(tmpDir)
 
-        return '%spdflatex' % (PATH_TO_PDFLATEX)
         #return Response(result, mimetype='application/pdf')
 
     return ''
