@@ -38,8 +38,7 @@ def root():
 def compile():
     if request.method == 'POST':
         # Get input file
-        inData = request.files['csvfile'].stream.read().decode('utf-8')
-        inFile = StringIO.StringIO(inData)
+        inFile = request.files['csvfile']
 
         # Create temporary directory
         tmpDir = tempfile.mkdtemp()

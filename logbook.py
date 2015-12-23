@@ -1,4 +1,6 @@
+import codecs
 import csv
+import unicodecsv
 import sys
 import re
 import datetime
@@ -131,11 +133,21 @@ class Copier:
 rows = []
 #---------------------------------------------------------------------
 
+def csv_unireader(f, encoding="utf-8"):
+    for row in csv.reader(codecs.iterencode(codecs.iterdecode(f, encoding), "utf-8")):
+        yield [e.decode("utf-8") for e in row]
+
 def csvToTex(templatePath, csvfile, templatefile, outfile):
     global rows
 
-    reader = csv.DictReader(csvfile)
+    reader = unicodecsv.DictReader(csvfile, encoding='utf-8-sig')
     rows = list(reader)
+
+    # Check if first column is parsed incorrectly (the Date column keeps its quotes
+    # and is named ""Date"". If an incorrect parsing is detected, fix it.
+    for i in range(len(rows)):
+        if u'"Date"' in rows[i].keys():
+            rows[i][u'Date'] = rows[i].pop(u'"Date"')
 
     #------------------------------------------------------------------------
     #
@@ -148,7 +160,7 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
     # Sorting is done by 'Date' column first, then by 'Engine Start' and 'Flight Start'
     #
     # TODO: Can we assume that these fields are always filled?
-    rows.sort(key=lambda x: (datetime.datetime.strptime(x['Date'], '%m/%d/%Y'), datetime.datetime.strptime(x['Engine Start'], '%Y-%m-%d %H:%M:%SZ'), datetime.datetime.strptime(x['Flight Start'], '%Y-%m-%d %H:%M:%SZ')))
+    rows.sort(key=lambda x: (datetime.datetime.strptime(x[u'Date'], '%m/%d/%Y'), datetime.datetime.strptime(x[u'Engine Start'], '%Y-%m-%d %H:%M:%SZ'), datetime.datetime.strptime(x[u'Flight Start'], '%Y-%m-%d %H:%M:%SZ')))
 
     # 'Landings' always contains the sum of landings. For the logbook we need
     # to distinguish between day and night landings. Since these are not always
@@ -162,8 +174,8 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
     #       landings is filled out and night landings is only filled with the
     #       number of night landings, while day landings is left at 0).
     for i in range(len(rows)):
-        if rows[i]['FS Day Landings'] == '0' and rows[i]['FS Night Landings'] == '0':
-            rows[i]['FS Day Landings'] = rows[i]['Landings']
+        if rows[i][u'FS Day Landings'] == '0' and rows[i][u'FS Night Landings'] == '0':
+            rows[i][u'FS Day Landings'] = rows[i][u'Landings']
 
     #------------------------------------------------------------------------
 
@@ -178,5 +190,5 @@ if __name__ == '__main__':
         print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
         exit()
 
-    with open(sys.argv[1]) as csvfile:
+    with open(sys.argv[1], 'rb') as csvfile:
         csvToTex('', csvfile, file('logbook_template.tex.py'), sys.stdout)

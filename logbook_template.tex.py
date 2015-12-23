@@ -20,7 +20,7 @@
 \fancyhead{}
 \fancyfoot{}
 #[
-print '\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}}' % (globals()['_templatePath'])
+_outf.write(u'\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}} ' % (globals()['_templatePath']))
 #]
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
@@ -85,33 +85,33 @@ for i in range(RowsPerPage):
 
     if currentRowInTable >= len(rows):
         # We exceeded the logbook, so print an empty line to fill the table properly
-        _outf.write(' & & & & & & & & & & & & & & & & & & & & & & \\\\')
+        _outf.write(u' & & & & & & & & & & & & & & & & & & & & & & \\\\')
     else:
         # The CSV export contains different date formats, so parse them individually
-        logDate = datetime.datetime.strptime(rows[currentRowInTable]['Date'], '%m/%d/%Y')
+        logDate = datetime.datetime.strptime(rows[currentRowInTable][u'Date'], '%m/%d/%Y')
 
-        departureCode = rows[currentRowInTable]['Route'].split(' ')[0]
-        arrivalCode   = rows[currentRowInTable]['Route'].split(' ')[-1]
+        departureCode = rows[currentRowInTable][u'Route'].split(' ')[0]
+        arrivalCode   = rows[currentRowInTable][u'Route'].split(' ')[-1]
 
         #
         # Parse flight time and calculate totals
         #
-        timeParts = [int(s) for s in rows[currentRowInTable]['Total Flight Time (HH:MM)'].split(':')]
+        timeParts = [int(s) for s in rows[currentRowInTable][u'Total Flight Time (HH:MM)'].split(':')]
         totalFlightMinutesThisPage += timeParts[0] * 60 + timeParts[1]
 
-        dayLandings   = 0 if rows[currentRowInTable]['FS Day Landings'] == '' else int(rows[currentRowInTable]['FS Day Landings'])
-        nightLandings = 0 if rows[currentRowInTable]['FS Night Landings'] == '' else int(rows[currentRowInTable]['FS Night Landings'])
-        timeNight     = 0.0 if rows[currentRowInTable]['Night'] == '' else float(rows[currentRowInTable]['Night'])
-        timeIMC       = 0.0 if rows[currentRowInTable]['IMC'] == '' else float(rows[currentRowInTable]['IMC'])
-        timePIC       = 0.0 if rows[currentRowInTable]['PIC'] == '' else float(rows[currentRowInTable]['PIC'])
-        timeSIC       = 0.0 if rows[currentRowInTable]['SIC'] == '' else float(rows[currentRowInTable]['SIC'])
-        timeDual      = 0.0 if rows[currentRowInTable]['Dual Received'] == '' else float(rows[currentRowInTable]['Dual Received'])
-        timeCFI       = 0.0 if rows[currentRowInTable]['CFI'] == '' else float(rows[currentRowInTable]['CFI'])
+        dayLandings   = 0 if rows[currentRowInTable][u'FS Day Landings'] == '' else int(rows[currentRowInTable][u'FS Day Landings'])
+        nightLandings = 0 if rows[currentRowInTable][u'FS Night Landings'] == '' else int(rows[currentRowInTable][u'FS Night Landings'])
+        timeNight     = 0.0 if rows[currentRowInTable][u'Night'] == '' else float(rows[currentRowInTable][u'Night'])
+        timeIMC       = 0.0 if rows[currentRowInTable][u'IMC'] == '' else float(rows[currentRowInTable][u'IMC'])
+        timePIC       = 0.0 if rows[currentRowInTable][u'PIC'] == '' else float(rows[currentRowInTable][u'PIC'])
+        timeSIC       = 0.0 if rows[currentRowInTable][u'SIC'] == '' else float(rows[currentRowInTable][u'SIC'])
+        timeDual      = 0.0 if rows[currentRowInTable][u'Dual Received'] == '' else float(rows[currentRowInTable][u'Dual Received'])
+        timeCFI       = 0.0 if rows[currentRowInTable][u'CFI'] == '' else float(rows[currentRowInTable][u'CFI'])
 
-        if rows[currentRowInTable]['Category/Class'] in totalCategoryThisPage.keys():
-            totalCategoryThisPage[rows[currentRowInTable]['Category/Class']] += 1
+        if rows[currentRowInTable][u'Category/Class'] in totalCategoryThisPage.keys():
+            totalCategoryThisPage[rows[currentRowInTable][u'Category/Class']] += 1
         else:
-            totalCategoryThisPage[rows[currentRowInTable]['Category/Class']] = 1
+            totalCategoryThisPage[rows[currentRowInTable][u'Category/Class']] = 1
 
         totalDayLandingsThisPage += dayLandings
         totalNightLandingsThisPage += nightLandings
@@ -122,14 +122,14 @@ for i in range(RowsPerPage):
         totalDualThisPage += timeDual
         totalCFIThisPage += timeCFI
 
-        _outf.write('%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & & & & %s %s \\\\' % (currentRowInTable+1,
+        _outf.write(u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & & & & %s %s \\\\ ' % (currentRowInTable+1,
             logDate.date().isoformat(), departureCode,
-            rows[currentRowInTable]['Engine Start'], arrivalCode,
-            rows[currentRowInTable]['Engine End'],
-            rows[currentRowInTable]['Model'],
-            rows[currentRowInTable]['Tail Number'],
-            rows[currentRowInTable]['Category/Class'],
-            rows[currentRowInTable]['Total Flight Time (HH:MM)'],
+            rows[currentRowInTable][u'Engine Start'], arrivalCode,
+            rows[currentRowInTable][u'Engine End'],
+            rows[currentRowInTable][u'Model'],
+            rows[currentRowInTable][u'Tail Number'],
+            rows[currentRowInTable][u'Category/Class'],
+            rows[currentRowInTable][u'Total Flight Time (HH:MM)'],
             dayLandings, nightLandings,
             math.floor(timeNight), round(timeNight*60%60),
             math.floor(timeIMC), round(timeIMC*60%60),
@@ -137,62 +137,62 @@ for i in range(RowsPerPage):
             math.floor(timeSIC), round(timeSIC*60%60),
             math.floor(timeDual), round(timeDual*60%60),
             math.floor(timeCFI), round(timeCFI*60%60),
-            rows[currentRowInTable]['Flight Properties'],
-            rows[currentRowInTable]['Comments']))
+            rows[currentRowInTable][u'Flight Properties'],
+            rows[currentRowInTable][u'Comments']))
 
-    _outf.write('\hline')
+    _outf.write(u'\hline ')
 
     currentRowInTable += 1
 #]
 
 #[
 
-thisPageHours, thisPageMinutes = divmod(totalFlightMinutesThisPage, 60)
-lastPageHours, lastPageMinutes = divmod(totalFlightMinutesLastPage, 60)
-totalHours, totalMinutes = divmod(totalFlightMinutesThisPage + totalFlightMinutesLastPage, 60)
-totalDayLandings = totalDayLandingsThisPage + totalDayLandingsLastPage
-totalNightLandings = totalNightLandingsThisPage + totalNightLandingsLastPage
-totalNight = totalNightThisPage + totalNightLastPage
-totalIMC = totalIMCThisPage + totalIMCLastPage
-totalPIC = totalPICThisPage + totalPICLastPage
-totalSIC = totalSICThisPage + totalSICLastPage
-totalDual = totalDualThisPage + totalDualLastPage
-totalCFI = totalCFIThisPage + totalCFILastPage
+#thisPageHours, thisPageMinutes = divmod(totalFlightMinutesThisPage, 60)
+#lastPageHours, lastPageMinutes = divmod(totalFlightMinutesLastPage, 60)
+#totalHours, totalMinutes = divmod(totalFlightMinutesThisPage + totalFlightMinutesLastPage, 60)
+#totalDayLandings = totalDayLandingsThisPage + totalDayLandingsLastPage
+#totalNightLandings = totalNightLandingsThisPage + totalNightLandingsLastPage
+#totalNight = totalNightThisPage + totalNightLastPage
+#totalIMC = totalIMCThisPage + totalIMCLastPage
+#totalPIC = totalPICThisPage + totalPICLastPage
+#totalSIC = totalSICThisPage + totalSICLastPage
+#totalDual = totalDualThisPage + totalDualLastPage
+#totalCFI = totalCFIThisPage + totalCFILastPage
 
 #
 # Sum up category totals as separate string
 #
-categoryTotalThisPageStr = ''
-for category in totalCategoryThisPage:
-    categoryTotalThisPageStr += '%s: %i\\\\' % (category, totalCategoryThisPage[category])
-
-categoryTotalLastPageStr = ''
-for category in totalCategoryLastPage:
-    categoryTotalLastPageStr += '%s: %i\\\\' % (category, totalCategoryLastPage[category])
-
-categoryTotalStr = ''
-for category in totalCategoryThisPage:
-    if category in totalCategoryLastPage.keys():
-        totalCategoryLastPage[category] += totalCategoryThisPage[category]
-    else:
-        totalCategoryLastPage[category] = totalCategoryThisPage[category]
-    categoryTotalStr += '%s: %i\\\\' % (category, totalCategoryLastPage[category])
-
-_outf.write('\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{I certify that the entries in this log are true.}} \\\\' % (categoryTotalThisPageStr, thisPageHours, thisPageMinutes, totalDayLandingsThisPage, totalNightLandingsThisPage, math.floor(totalNightThisPage), round(totalNightThisPage*60%60), math.floor(totalIMCThisPage), round(totalIMCThisPage*60%60), math.floor(totalPICThisPage), round(totalPICThisPage*60%60), math.floor(totalSICThisPage), round(totalSICThisPage*60%60), math.floor(totalDualThisPage), round(totalDualThisPage*60%60), math.floor(totalCFIThisPage), round(totalCFIThisPage*60%60)))
-_outf.write('\cline{8-19}')
-_outf.write('\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL FROM PREVIOUS PAGES & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}} \\\\' % (categoryTotalLastPageStr, lastPageHours, lastPageMinutes, totalDayLandingsLastPage, totalNightLandingsLastPage, math.floor(totalNightLastPage), round(totalNightLastPage*60%60), math.floor(totalIMCLastPage), round(totalIMCLastPage*60%60), math.floor(totalPICLastPage), round(totalPICLastPage*60%60), math.floor(totalSICLastPage), round(totalSICLastPage*60%60), math.floor(totalDualLastPage), round(totalDualLastPage*60%60), math.floor(totalCFILastPage), round(totalCFILastPage*60%60)))
-_outf.write('\cline{8-23}')
-_outf.write('\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL TIMES & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{PILOT\'S SIGNATURE}} \\\\' % (categoryTotalStr, totalHours, totalMinutes, totalDayLandings, totalNightLandings, math.floor(totalNight), round(totalNight*60%60), math.floor(totalIMC), round(totalIMC*60%60), math.floor(totalPIC), round(totalPIC*60%60), math.floor(totalSIC), round(totalSIC*60%60), math.floor(totalDual), round(totalDual*60%60), math.floor(totalCFI), round(totalCFI*60%60)))
-
-totalFlightMinutesLastPage += totalFlightMinutesThisPage
-totalDayLandingsLastPage += totalDayLandingsThisPage
-totalNightLandingsLastPage += totalNightLandingsThisPage
-totalNightLastPage += totalNightThisPage
-totalIMCLastPage += totalIMCThisPage
-totalPICLastPage += totalPICThisPage
-totalSICLastPage += totalSICThisPage
-totalDualLastPage += totalDualThisPage
-totalCFILastPage += totalCFIThisPage
+#categoryTotalThisPageStr = u''
+#for category in totalCategoryThisPage:
+#    categoryTotalThisPageStr += u'%s: %i\\\\' % (category, totalCategoryThisPage[category])
+#
+#categoryTotalLastPageStr = u''
+#for category in totalCategoryLastPage:
+#    categoryTotalLastPageStr += u'%s: %i\\\\' % (category, totalCategoryLastPage[category])
+#
+#categoryTotalStr = u''
+#for category in totalCategoryThisPage:
+#    if category in totalCategoryLastPage.keys():
+#        totalCategoryLastPage[category] += totalCategoryThisPage[category]
+#    else:
+#        totalCategoryLastPage[category] = totalCategoryThisPage[category]
+#    categoryTotalStr += '%s: %i\\\\' % (category, totalCategoryLastPage[category])
+#
+#_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{I certify that the entries in this log are true.}} \\\\' % (categoryTotalThisPageStr, thisPageHours, thisPageMinutes, totalDayLandingsThisPage, totalNightLandingsThisPage, math.floor(totalNightThisPage), round(totalNightThisPage*60%60), math.floor(totalIMCThisPage), round(totalIMCThisPage*60%60), math.floor(totalPICThisPage), round(totalPICThisPage*60%60), math.floor(totalSICThisPage), round(totalSICThisPage*60%60), math.floor(totalDualThisPage), round(totalDualThisPage*60%60), math.floor(totalCFIThisPage), round(totalCFIThisPage*60%60)))
+#_outf.write(u'\cline{8-19}')
+#_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL FROM PREVIOUS PAGES & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}} \\\\' % (categoryTotalLastPageStr, lastPageHours, lastPageMinutes, totalDayLandingsLastPage, totalNightLandingsLastPage, math.floor(totalNightLastPage), round(totalNightLastPage*60%60), math.floor(totalIMCLastPage), round(totalIMCLastPage*60%60), math.floor(totalPICLastPage), round(totalPICLastPage*60%60), math.floor(totalSICLastPage), round(totalSICLastPage*60%60), math.floor(totalDualLastPage), round(totalDualLastPage*60%60), math.floor(totalCFILastPage), round(totalCFILastPage*60%60)))
+#_outf.write(u'\cline{8-23}')
+#_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL TIMES & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{PILOT\'S SIGNATURE}} \\\\' % (categoryTotalStr, totalHours, totalMinutes, totalDayLandings, totalNightLandings, math.floor(totalNight), round(totalNight*60%60), math.floor(totalIMC), round(totalIMC*60%60), math.floor(totalPIC), round(totalPIC*60%60), math.floor(totalSIC), round(totalSIC*60%60), math.floor(totalDual), round(totalDual*60%60), math.floor(totalCFI), round(totalCFI*60%60)))
+#
+#totalFlightMinutesLastPage += totalFlightMinutesThisPage
+#totalDayLandingsLastPage += totalDayLandingsThisPage
+#totalNightLandingsLastPage += totalNightLandingsThisPage
+#totalNightLastPage += totalNightThisPage
+#totalIMCLastPage += totalIMCThisPage
+#totalPICLastPage += totalPICThisPage
+#totalSICLastPage += totalSICThisPage
+#totalDualLastPage += totalDualThisPage
+#totalCFILastPage += totalCFIThisPage
 #]
 
 \tabucline[1.5pt]{8-19}
