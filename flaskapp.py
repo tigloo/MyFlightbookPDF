@@ -41,9 +41,9 @@ def compile():
         pdfFileName = tmpDir + '/output.pdf'
 
         # Generate LateX output
-        #texFile = file(texFileName, 'w')
-        #logbook.csvToTex(inFile, texFile)
-        #texFile.close()
+        texFile = file(texFileName, 'w')
+        logbook.csvToTex(inFile, texFile)
+        texFile.close()
 
         # Compile to PDF
         #call(["%spdflatex" % (PATH_TO_PDFLATEX), "-output-directory=%s" % (tmpDir), texFileName])
