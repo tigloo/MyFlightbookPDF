@@ -160,7 +160,7 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
     # Sorting is done by 'Date' column first, then by 'Engine Start' and 'Flight Start'
     #
     # TODO: Can we assume that these fields are always filled?
-    rows.sort(key=lambda x: (datetime.datetime.strptime(x[u'Date'], '%m/%d/%Y'), datetime.datetime.strptime(x[u'Engine Start'], '%Y-%m-%d %H:%M:%SZ'), datetime.datetime.strptime(x[u'Flight Start'], '%Y-%m-%d %H:%M:%SZ')))
+    rows.sort(key=lambda x: (datetime.datetime.strptime(x[u'Date'], '%m/%d/%Y'), datetime.datetime.strptime(x[u'Engine Start'], '%Y-%m-%d %H:%M:%SZ') if u'Engine Start' in x.keys() and x[u'Engine Start'] != u'' else datetime.datetime.min, datetime.datetime.strptime(x[u'Flight Start'], '%Y-%m-%d %H:%M:%SZ') if u'Flight Start' in x.keys() and x[u'Flight Start'] != u'' else datetime.datetime.min))
 
     # 'Landings' always contains the sum of landings. For the logbook we need
     # to distinguish between day and night landings. Since these are not always
