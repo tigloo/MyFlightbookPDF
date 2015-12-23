@@ -10,7 +10,7 @@ import logbook
 # This is the path to pdflatex INCLUDING a trailing slash
 PATH_TO_PDFLATEX = ''
 if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
-    PATH_TO_PDFLATEX = os.environ['OPENSHIFT_REPO_DIR'] + '/openshift-origin-cartridge-texlive/bin/x86_64-linux/'
+    PATH_TO_PDFLATEX = os.environ['OPENSHIFT_REPO_DIR'] + '/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/'
     if(os.path.isfile(PATH_TO_PDFLATEX + 'pdflatex') == False):
         # Seemingly we do not run on OpenShift, so assume that pdfLateX is in the path
         PATH_TO_PDFLATEX = ''
