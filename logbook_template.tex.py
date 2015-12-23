@@ -96,17 +96,20 @@ for i in range(RowsPerPage):
         #
         # Parse flight time and calculate totals
         #
-        timeParts = [int(s) for s in rows[currentRowInTable][u'Total Flight Time (HH:MM)'].split(':')]
-        totalFlightMinutesThisPage += timeParts[0] * 60 + timeParts[1]
+        if rows[currentRowInTable][u'Total Flight Time (HH:MM)'] == u'':
+            totalFlightMinutesThisPage += 0
+        else:
+            timeParts = [int(s) for s in rows[currentRowInTable][u'Total Flight Time (HH:MM)'].split(':')]
+            totalFlightMinutesThisPage += timeParts[0] * 60 + timeParts[1]
 
-        dayLandings   = 0 if rows[currentRowInTable][u'FS Day Landings'] == '' else int(rows[currentRowInTable][u'FS Day Landings'])
-        nightLandings = 0 if rows[currentRowInTable][u'FS Night Landings'] == '' else int(rows[currentRowInTable][u'FS Night Landings'])
-        timeNight     = 0.0 if rows[currentRowInTable][u'Night'] == '' else float(rows[currentRowInTable][u'Night'])
-        timeIMC       = 0.0 if rows[currentRowInTable][u'IMC'] == '' else float(rows[currentRowInTable][u'IMC'])
-        timePIC       = 0.0 if rows[currentRowInTable][u'PIC'] == '' else float(rows[currentRowInTable][u'PIC'])
-        timeSIC       = 0.0 if rows[currentRowInTable][u'SIC'] == '' else float(rows[currentRowInTable][u'SIC'])
-        timeDual      = 0.0 if rows[currentRowInTable][u'Dual Received'] == '' else float(rows[currentRowInTable][u'Dual Received'])
-        timeCFI       = 0.0 if rows[currentRowInTable][u'CFI'] == '' else float(rows[currentRowInTable][u'CFI'])
+        dayLandings   = 0 if rows[currentRowInTable][u'FS Day Landings'] == u'' else int(rows[currentRowInTable][u'FS Day Landings'])
+        nightLandings = 0 if rows[currentRowInTable][u'FS Night Landings'] == u'' else int(rows[currentRowInTable][u'FS Night Landings'])
+        timeNight     = 0.0 if rows[currentRowInTable][u'Night'] == u'' else float(rows[currentRowInTable][u'Night'])
+        timeIMC       = 0.0 if rows[currentRowInTable][u'IMC'] == u'' else float(rows[currentRowInTable][u'IMC'])
+        timePIC       = 0.0 if rows[currentRowInTable][u'PIC'] == u'' else float(rows[currentRowInTable][u'PIC'])
+        timeSIC       = 0.0 if rows[currentRowInTable][u'SIC'] == u'' else float(rows[currentRowInTable][u'SIC'])
+        timeDual      = 0.0 if rows[currentRowInTable][u'Dual Received'] == u'' else float(rows[currentRowInTable][u'Dual Received'])
+        timeCFI       = 0.0 if rows[currentRowInTable][u'CFI'] == u'' else float(rows[currentRowInTable][u'CFI'])
 
         if rows[currentRowInTable][u'Category/Class'] in totalCategoryThisPage.keys():
             totalCategoryThisPage[rows[currentRowInTable][u'Category/Class']] += 1
