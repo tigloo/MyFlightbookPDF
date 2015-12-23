@@ -20,7 +20,7 @@
 \fancyhead{}
 \fancyfoot{}
 #[
-print '\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}}' % (PATH_TO_TEMPLATES)
+print '\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}}' % (self.globals['_templatePath'])
 #]
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}

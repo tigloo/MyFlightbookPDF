@@ -131,7 +131,7 @@ class Copier:
 rows = []
 #---------------------------------------------------------------------
 
-def csvToTex(csvfile, templatefile, outfile):
+def csvToTex(templatePath, csvfile, templatefile, outfile):
     global rows
 
     reader = csv.DictReader(csvfile)
@@ -168,7 +168,9 @@ def csvToTex(csvfile, templatefile, outfile):
     #------------------------------------------------------------------------
 
     # Read template and process it, output will be sent to stdout
-    copier = Copier(globals())
+    copyGlobals = globals()
+    copyGlobals['_templatePath'] = templatePath
+    copier = Copier(copyGlobals)
     copier.copyout(templatefile, outfile)
 
 #if len(sys.argv) != 2:
