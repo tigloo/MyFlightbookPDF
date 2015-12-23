@@ -19,7 +19,9 @@
 \pagestyle{fancy}
 \fancyhead{}
 \fancyfoot{}
-\fancyhead[C]{\includegraphics[width=3cm]{myflightbook.png}}
+#[
+print '\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}}' % (PATH_TO_TEMPLATES)
+#]
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
