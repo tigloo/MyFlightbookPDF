@@ -1,5 +1,7 @@
-echo Downloading texlive...
-curl -L -o $OPENSHIFT_REPO_DIR/texlive.zip https://github.com/tigloo/openshift-origin-cartridge-texlive/archive/master.zip
-cd $OPENSHIFT_REPO_DIR
-unzip $OPENSHIFT_REPO_DIR/texlive.zip > /dev/null
-rm $OPENSHIFT_REPO_DIR/texlive.zip
+if [ ! -d "$OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive" ]; then
+  echo Downloading texlive...
+  curl -L -o $OPENSHIFT_REPO_DIR/texlive.zip https://github.com/tigloo/openshift-origin-cartridge-texlive/archive/master.zip
+  cd $OPENSHIFT_REPO_DIR
+  unzip $OPENSHIFT_REPO_DIR/texlive.zip > /dev/null
+  rm $OPENSHIFT_REPO_DIR/texlive.zip
+fi
