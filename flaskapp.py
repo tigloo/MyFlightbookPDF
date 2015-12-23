@@ -11,8 +11,10 @@ import logging
 
 # This is the path to pdflatex INCLUDING a trailing slash
 PATH_TO_PDFLATEX = ''
+PATH_TO_TEMPLATES = ''
 if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
-    PATH_TO_PDFLATEX = os.environ['OPENSHIFT_REPO_DIR'] + '/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/'
+    PATH_TO_TEMPLATES = os.environ['OPENSHIFT_REPO_DIR']
+    PATH_TO_PDFLATEX = os.environ['OPENSHIFT_REPO_DIR'] + 'openshift-origin-cartridge-texlive-master/bin/x86_64-linux/'
     if(os.path.isfile(PATH_TO_PDFLATEX + 'pdflatex') == False):
         # Seemingly we do not run on OpenShift, so assume that pdfLateX is in the path
         PATH_TO_PDFLATEX = ''
@@ -43,10 +45,11 @@ def compile():
         # Create temporary output file names
         texFileName = tmpDir + '/output.tex'
         pdfFileName = tmpDir + '/output.pdf'
+        templateFileName = PATH_TO_TEMPLATES + 'logbook_template.tex.py'
 
         # Generate LateX output
         texFile = file(texFileName, 'w')
-        logbook.csvToTex(inFile, texFile)
+        logbook.csvToTex(inFile, file(templateFileName), texFile)
         texFile.close()
 
         # Compile to PDF

@@ -115,8 +115,8 @@ class Copier:
         self.outf = file(outname, 'w')
         self.copyblock()
 
-    def copyout(self, template, outfile):
-        self.globals['_bl'] = file(template).readlines()
+    def copyout(self, templatefile, outfile):
+        self.globals['_bl'] = templatefile.readlines()
         self.globals['_outf'] = outfile
         self.outf = outfile
         self.copyblock()
@@ -131,7 +131,7 @@ class Copier:
 rows = []
 #---------------------------------------------------------------------
 
-def csvToTex(csvfile, outfile):
+def csvToTex(csvfile, templatefile, outfile):
     global rows
 
     reader = csv.DictReader(csvfile)
@@ -169,7 +169,7 @@ def csvToTex(csvfile, outfile):
 
     # Read template and process it, output will be sent to stdout
     copier = Copier(globals())
-    copier.copyout('logbook_template.tex.py', outfile)
+    copier.copyout(templatefile, outfile)
 
 #if len(sys.argv) != 2:
 #    print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
