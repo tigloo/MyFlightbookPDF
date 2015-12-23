@@ -6,6 +6,7 @@ import os
 import shutil
 from subprocess import call
 import logbook
+import logging
 
 # This is the path to pdflatex INCLUDING a trailing slash
 PATH_TO_PDFLATEX = ''
@@ -21,6 +22,8 @@ APP_STATIC = os.path.join(APP_ROOT, 'static')
 
 app = Flask(__name__)
 
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 @app.route('/')
 def root():
