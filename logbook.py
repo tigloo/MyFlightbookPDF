@@ -135,9 +135,26 @@ class Copier:
 rows = []
 #---------------------------------------------------------------------
 
-def csv_unireader(f, encoding="utf-8"):
-    for row in csv.reader(codecs.iterencode(codecs.iterdecode(f, encoding), "utf-8")):
-        yield [e.decode("utf-8") for e in row]
+def texEscape(text):
+    CHARS = [
+        [u'\\', u'\\letterbackslash{}'],
+        [u'&',  u'\\&'],
+        [u'%',  u'\\%'],
+        [u'$',  u'\\$'],
+        [u'#',  u'\\#'],
+        [u'_',  u'\\letterunderscore{}'],
+        [u'{',  u'\\letteropenbrace{}'],
+        [u'}',  u'\\letterclosebrace{}'],
+        [u'~',  u'\\lettertilde{}'],
+        [u'^',  u'\\letterhat{}'],
+    ]
+
+    retval = text
+
+    for i in range(len(CHARS)):
+        retval = retval.replace(CHARS[i][0], CHARS[i][1])
+
+    return retval
 
 def csvToTex(templatePath, csvfile, templatefile, outfile):
     global rows
@@ -178,6 +195,10 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
     for i in range(len(rows)):
         if rows[i][u'FS Day Landings'] == '0' and rows[i][u'FS Night Landings'] == '0':
             rows[i][u'FS Day Landings'] = rows[i][u'Landings']
+
+        # Escape user supplied content
+        rows[i][u'Flight Properties'] = texEscape(rows[i][u'Flight Properties'])
+        rows[i][u'Comments'] = texEscape(rows[i][u'Comments'])
 
     #------------------------------------------------------------------------
 

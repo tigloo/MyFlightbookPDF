@@ -140,8 +140,8 @@ for i in range(RowsPerPage):
             math.floor(timeSIC), round(timeSIC*60%60),
             math.floor(timeDual), round(timeDual*60%60),
             math.floor(timeCFI), round(timeCFI*60%60),
-            rows[currentRowInTable][u'Flight Properties'].replace('&', '\\&'),
-            rows[currentRowInTable][u'Comments'].replace('&', '\\&'))).encode('utf-8'))
+            rows[currentRowInTable][u'Flight Properties'],
+            rows[currentRowInTable][u'Comments'])).encode('utf-8'))
 
     _outf.write(u'\hline ')
 
