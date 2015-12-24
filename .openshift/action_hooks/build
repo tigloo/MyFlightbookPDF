@@ -8,3 +8,6 @@ if [ ! -d "$OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive" ]; then
   popd  
   echo TeXLive: Done!
 fi
+
+echo Installing Python package unicodecsv...
+pip install unicodecsv
