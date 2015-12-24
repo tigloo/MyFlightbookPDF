@@ -173,13 +173,16 @@ categoryTotalLastPageStr = u''
 for category in totalCategoryLastPage:
     categoryTotalLastPageStr += u'%s: %i\\\\' % (category, totalCategoryLastPage[category])
 
-categoryTotalStr = u''
+# Compute totals by joining the "this page" and "last page" totals arrays
 for category in totalCategoryThisPage:
     if category in totalCategoryLastPage.keys():
         totalCategoryLastPage[category] += totalCategoryThisPage[category]
     else:
         totalCategoryLastPage[category] = totalCategoryThisPage[category]
-    categoryTotalStr += '%s: %i\\\\' % (category, totalCategoryLastPage[category])
+
+categoryTotalStr = u''
+for category in totalCategoryLastPage:
+    categoryTotalStr += u'%s: %i\\\\' % (category, totalCategoryLastPage[category])
 
 _outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & \\pbox{\\textwidth}{%s} & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & \\multicolumn{1}{l|[1.5pt]}{%d:%02d} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{I certify that the entries in this log are true.}} \\\\' % (categoryTotalThisPageStr, thisPageHours, thisPageMinutes, totalDayLandingsThisPage, totalNightLandingsThisPage, math.floor(totalNightThisPage), round(totalNightThisPage*60%60), math.floor(totalIMCThisPage), round(totalIMCThisPage*60%60), math.floor(totalPICThisPage), round(totalPICThisPage*60%60), math.floor(totalSICThisPage), round(totalSICThisPage*60%60), math.floor(totalDualThisPage), round(totalDualThisPage*60%60), math.floor(totalCFIThisPage), round(totalCFIThisPage*60%60)))
 _outf.write(u'\cline{8-19}')
