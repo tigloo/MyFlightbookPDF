@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, send_file
 from flask import request
 from flask import Response
@@ -37,11 +39,20 @@ def root():
 @app.route('/compile', methods=['POST'])
 def compile():
     if request.method == 'POST':
-        # Get input file
+        # Get uploaded input file
         inFile = request.files['csvfile']
 
         # Create temporary directory
         tmpDir = tempfile.mkdtemp()
+
+        # Temporarily write uploaded input file to disk because Flask's Unicode handling seems broken
+        # This is a dirty hack because Unicode decoding should work within memory, too
+        tmpFile = open('%s/tmpdata.csv' % (tmpDir), 'w')
+        tmpFile.write(inFile.read())
+        tmpFile.close()
+
+        # Re-assign inFile to point to the cached upload
+        inFile = open('%s/tmpdata.csv' % (tmpDir), 'rb')
 
         # Create temporary output file names
         texFileName = tmpDir + '/output.tex'
