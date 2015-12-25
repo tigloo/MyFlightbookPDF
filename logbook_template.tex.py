@@ -90,6 +90,8 @@ for i in range(RowsPerPage):
         # The CSV export contains different date formats, so parse them individually
         logDate = datetime.datetime.strptime(rows[currentRowInTable][u'Date'], '%Y-%m-%d')
 
+        # Replace dashes in route with spaces to be able to work with airport codes separated by either spaces or dashes
+        rows[currentRowInTable][u'Route'] = rows[currentRowInTable][u'Route'].replace('-', ' ')
         departureCode = rows[currentRowInTable][u'Route'].split(' ')[0]
         arrivalCode   = rows[currentRowInTable][u'Route'].split(' ')[-1]
 
