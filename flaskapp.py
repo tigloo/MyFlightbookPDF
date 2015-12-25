@@ -65,7 +65,7 @@ def compile():
         texFile.close()
 
         # Compile to PDF
-        call(["%spdflatex" % (PATH_TO_PDFLATEX), "-output-directory=%s" % (tmpDir), texFileName])
+        call(["%spdflatex" % (PATH_TO_PDFLATEX), "-interaction=nonstopmode", "-halt-on-error", "-output-directory=%s" % (tmpDir), texFileName])
 
         pdfFile = file(pdfFileName, 'r')
         result = pdfFile.read()
