@@ -1,8 +1,16 @@
 This is a very simple PDF exporter for MyFlightbook.com.
 
-It processes MyFlightbook's CSV files and turns them into a LateX file. The code is meant to be integrated into the website (although it can run just fine stand-alone at the moment). Some changes are needed during integration depending on the server setup, so consider this to be a preliminary version.
+It processes MyFlightbook's CSV files and turns them into a LateX file. The code can be deployed to an OpenShift instance as-is and will present a simple web interface there, accepting a CSV file as input and producing a compiled PDF in return.
+
+A second use scenario is the stand-alone usage of logbook.py from the command line. Logbook.py will turn a CSV file into a ready-to-compile TeX file.
 
 Usage:
 logbook.py <CSV file>
 
 <CSV file> is the name of the exported CSV file from Myflightbook.com. Output is sent to stdout as LateX code. Use pdfLatex to generate a PDF.
+
+Dependencies:
+- TeXLive (or any other TeX distribution that provides pdflatex)
+- unicodecsv for Python
+
+Both dependencies are automatically installed when deploying to OpenShift. When using logbook.py from the command line, these dependencies need to be installed manually. The generated TeX code requires only few TeX packages, these packages are already included in the TeXLive version that is deployed automatically to OpenShift. When compiling manually, a first run of TeX in interactive mode will help in case of missing packages.
