@@ -156,11 +156,62 @@ def texEscape(text):
 
     return retval
 
+#
+# Returns -1 for x < y
+# Returns 0 for x == y
+# Returns 1 for x > y
+def rowDateCompare(x, y):
+    print x
+
+    xDateStr = x[u'Date']
+    xEngineStartStr = x[u'Engine Start'] if u'Engine Start' in x.keys() else u''
+    xFlightStartStr = x[u'Flight Start'] if u'Flight Start' in x.keys() else u''
+
+    xDate = datetime.datetime.strptime(xDateStr, '%Y-%m-%d')
+    xEngineStart = datetime.datetime.strptime(xEngineStartStr, '%Y-%m-%d %H:%M:%SZ') if xEngineStartStr != u'' else datetime.datetime.min
+    xFlightStart = datetime.datetime.strptime(xFlightStartStr, '%Y-%m-%d %H:%M:%SZ') if xFlightStartStr != u'' else datetime.datetime.min
+
+    yDateStr = y[u'Date']
+    yEngineStartStr = y[u'Engine Start'] if u'Engine Start' in y.keys() else u''
+    yFlightStartStr = y[u'Flight Start'] if u'Flight Start' in y.keys() else u''
+
+    yDate = datetime.datetime.strptime(yDateStr, '%Y-%m-%d')
+    yEngineStart = datetime.datetime.strptime(yEngineStartStr, '%Y-%m-%d %H:%M:%SZ') if yEngineStartStr != u'' else datetime.datetime.min
+    yFlightStart = datetime.datetime.strptime(yFlightStartStr, '%Y-%m-%d %H:%M:%SZ') if yFlightStartStr != u'' else datetime.datetime.min
+
+    if xDate < yDate:
+        return -1
+
+    if xDate > yDate:
+        return 1
+
+    # Flight dates are equal, sort by engine start
+    if xEngineStart < yEngineStart:
+        return -1
+
+    if xEngineStart > yEngineStart:
+        return 1
+
+    # Engine start dates are equal (probably due to being datetime.min), sort by flight start
+    if xFlightStart < yFlightStart:
+        return -1
+
+    if xFlightStart > yFlightStart:
+        return 1
+
+    return 0
+
 def csvToTex(templatePath, csvfile, templatefile, outfile):
     global rows
 
+    # Sniff to detect delimiter
     dialect = unicodecsv.Sniffer().sniff(csvfile.read(1024), ',;')
     csvfile.seek(0)
+
+    # We know that quotes need to be used
+    dialect.quoting = csv.QUOTE_ALL
+    dialect.doublequote = True
+
     reader = unicodecsv.DictReader(csvfile, dialect=dialect, encoding='utf-8-sig')
     rows = list(reader)
 
@@ -177,10 +228,14 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
     #       level for efficiency reasons.
     #
 
+    for i in range(len(rows)):
+        print "EStart: %s\tFStart: %s" % (rows[i][u'Engine Start'], rows[i][u'Flight Start'])
+
     # The CSV export is unsorted, sort it by date.
     # Sorting is done by 'Date' column first, then by 'Engine Start' and 'Flight Start'
     #
     # TODO: Can we assume that these fields are always filled?
+    #rows.sort(cmp=rowDateCompare)
     rows.sort(key=lambda x: (datetime.datetime.strptime(x[u'Date'], '%Y-%m-%d'), datetime.datetime.strptime(x[u'Engine Start'], '%Y-%m-%d %H:%M:%SZ') if u'Engine Start' in x.keys() and x[u'Engine Start'] != u'' else datetime.datetime.min, datetime.datetime.strptime(x[u'Flight Start'], '%Y-%m-%d %H:%M:%SZ') if u'Flight Start' in x.keys() and x[u'Flight Start'] != u'' else datetime.datetime.min))
 
     # 'Landings' always contains the sum of landings. For the logbook we need
