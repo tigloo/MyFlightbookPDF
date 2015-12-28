@@ -161,8 +161,6 @@ def texEscape(text):
 # Returns 0 for x == y
 # Returns 1 for x > y
 def rowDateCompare(x, y):
-    print x
-
     xDateStr = x[u'Date']
     xEngineStartStr = x[u'Engine Start'] if u'Engine Start' in x.keys() else u''
     xFlightStartStr = x[u'Flight Start'] if u'Flight Start' in x.keys() else u''
