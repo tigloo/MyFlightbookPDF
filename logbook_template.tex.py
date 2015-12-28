@@ -1,7 +1,5 @@
 \documentclass{article}
 
-\usepackage[a4paper,landscape,left=1cm,right=1cm,headheight=40pt,foot=100pt]{geometry}
-
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{tabu}
@@ -9,6 +7,8 @@
 \usepackage{fancyhdr}
 \usepackage{pifont}
 \usepackage{pbox}
+
+\usepackage[a4paper,landscape,left=1cm,right=1cm,headheight=40pt,foot=80pt]{geometry}
 
 \usepackage{multirow}
 
