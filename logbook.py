@@ -170,8 +170,6 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
         if u'"Date"' in rows[i].keys():
             rows[i][u'Date'] = rows[i].pop(u'"Date"')
 
-    print rows
-
     #------------------------------------------------------------------------
     #
     # Data Pre-Processing
