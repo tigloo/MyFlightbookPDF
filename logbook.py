@@ -146,7 +146,7 @@ def texEscape(text):
         [u'{',  u'\\letteropenbrace{}'],
         [u'}',  u'\\letterclosebrace{}'],
         [u'~',  u'\\lettertilde{}'],
-        [u'^',  u'\\letterhat{}'],
+        [u'^',  u'\\letterhat{}']
     ]
 
     retval = text
@@ -197,6 +197,10 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
             rows[i][u'FS Day Landings'] = rows[i][u'Landings']
 
         # Escape user supplied content
+        rows[i][u'Model'] = texEscape(rows[i][u'Model'])
+        rows[i][u'Tail Number'] = texEscape(rows[i][u'Tail Number'])
+        rows[i][u'Category/Class'] = texEscape(rows[i][u'Category/Class'])
+        rows[i][u'Route'] = texEscape(rows[i][u'Route'])
         rows[i][u'Flight Properties'] = texEscape(rows[i][u'Flight Properties'])
         rows[i][u'Comments'] = texEscape(rows[i][u'Comments'])
 
