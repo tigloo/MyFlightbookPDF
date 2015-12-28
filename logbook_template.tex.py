@@ -1,6 +1,6 @@
 \documentclass{article}
 
-\usepackage[a4paper,landscape,left=1cm,right=1cm,headheight=40pt]{geometry}
+\usepackage[a4paper,landscape,left=1cm,right=1cm,headheight=40pt,foot=100pt]{geometry}
 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
@@ -54,7 +54,7 @@ totalCFILastPage = 0.0
 #[ while currentRowInTable < len(rows):
 
 \noindent\resizebox{\textwidth}{!}{
-    \begin{tabu}{|[1.5pt]m{0.015\textwidth}|l|l|m{0.07\textwidth}|l|m{0.07\textwidth}|l|m{0.1\textwidth}|m{0.14\textwidth}|l|L{5cm}|l|l|[1.5pt]m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|l|l|l|l|m{0.2\textwidth}|[1.5pt]}
+    \begin{tabu}{|[1.5pt]m{0.015\textwidth}|l|l|m{0.07\textwidth}|l|m{0.07\textwidth}|m{0.14\textwidth}|m{0.1\textwidth}|m{0.2\textwidth}|l|L{5cm}|l|l|[1.5pt]m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|l|l|l|l|m{0.2\textwidth}|[1.5pt]}
 
 \hiderowcolors
 
