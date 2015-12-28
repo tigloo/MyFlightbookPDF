@@ -159,7 +159,9 @@ def texEscape(text):
 def csvToTex(templatePath, csvfile, templatefile, outfile):
     global rows
 
-    reader = unicodecsv.DictReader(csvfile, encoding='utf-8-sig')
+    dialect = unicodecsv.Sniffer().sniff(csvfile.read(1024), ',;')
+    csvfile.seek(0)
+    reader = unicodecsv.DictReader(csvfile, dialect=dialect, encoding='utf-8-sig')
     rows = list(reader)
 
     # Check if first column is parsed incorrectly (the Date column keeps its quotes
@@ -167,6 +169,8 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
     for i in range(len(rows)):
         if u'"Date"' in rows[i].keys():
             rows[i][u'Date'] = rows[i].pop(u'"Date"')
+
+    print rows
 
     #------------------------------------------------------------------------
     #
