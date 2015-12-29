@@ -8,6 +8,7 @@ import re
 import datetime
 import math
 import locale
+import argparse
 
 #
 # Snippet below based on YAPTU, "Yet Another Python Templating Utility, Version 1.2"
@@ -293,9 +294,11 @@ def csvToTex(templatePath, csvfile, localeToUse, templatefile, outfile):
     copier.copyout(templatefile, outfile)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print 'Usage:\n%s <CSV file>\n\n<CSV file>\tInput file to process.\n\nOutput is sent to stdout.' % (sys.argv[0])
-        exit()
+    parser = argparse.ArgumentParser(description='Logbook compiler for Myflightbook.com. Takes CSV files as input and translates it to TeX code.')
+    parser.add_argument('--locale', help='Locale to use')
+    parser.add_argument('csvfile', help='Input file to process')
 
-    with open(sys.argv[1], 'rb') as csvfile:
-        csvToTex('', csvfile, file('logbook_template.tex.py'), sys.stdout)
+    args = parser.parse_args()
+
+    with open(args.csvfile, 'rb') as csvfile:
+        csvToTex('', csvfile, args.locale, file('logbook_template.tex.py'), sys.stdout)
