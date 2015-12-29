@@ -267,6 +267,10 @@ def csvToTex(templatePath, csvfile, localeToUse, templatefile, outfile):
         if rows[i][u'FS Day Landings'] == '0' and rows[i][u'FS Night Landings'] == '0':
             rows[i][u'FS Day Landings'] = rows[i][u'Landings']
 
+        # Remove anonymous tail numbers
+        if rows[i][u'Tail Number'].startswith(u'#'):
+            rows[i][u'Tail Number'] = u'N/A'
+
         # Escape user supplied content
         rows[i][u'Model'] = texEscape(rows[i][u'Model'])
         rows[i][u'Tail Number'] = texEscape(rows[i][u'Tail Number'])
