@@ -276,6 +276,7 @@ def csvToTex(templatePath, csvfile, localeToUse, templatefile, outfile):
         rows[i][u'Comments'] = texEscape(rows[i][u'Comments'])
 
         # Remove thousands-separator if it is present
+        rows[i][u'Total Flight Time'] = rows[i][u'Total Flight Time'].replace(thousandsSeparator, '')
         rows[i][u'FS Day Landings'] = rows[i][u'FS Day Landings'].replace(thousandsSeparator, '')
         rows[i][u'FS Night Landings'] = rows[i][u'FS Night Landings'].replace(thousandsSeparator, '')
         rows[i][u'Night'] = rows[i][u'Night'].replace(thousandsSeparator, '')
