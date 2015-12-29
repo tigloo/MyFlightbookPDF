@@ -226,9 +226,6 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
     #       level for efficiency reasons.
     #
 
-    for i in range(len(rows)):
-        print "EStart: %s\tFStart: %s" % (rows[i][u'Engine Start'], rows[i][u'Flight Start'])
-
     # The CSV export is unsorted, sort it by date.
     # Sorting is done by 'Date' column first, then by 'Engine Start' and 'Flight Start'
     #
