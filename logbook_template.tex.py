@@ -98,16 +98,16 @@ for i in range(RowsPerPage):
         #
         # Parse flight time and calculate totals
         #
-        totalFlightMinutesThisPage += 0.0 if rows[currentRowInTable][u'Total Flight Time'] == u'' else float(rows[currentRowInTable][u'Total Flight Time'].replace(',', ''))*60
+        totalFlightMinutesThisPage += 0.0 if rows[currentRowInTable][u'Total Flight Time'] == u'' else locale.atof(rows[currentRowInTable][u'Total Flight Time'].replace(',', ''))*60
 
-        dayLandings   = 0 if rows[currentRowInTable][u'FS Day Landings'] == u'' else int(rows[currentRowInTable][u'FS Day Landings'].replace(',', ''))
-        nightLandings = 0 if rows[currentRowInTable][u'FS Night Landings'] == u'' else int(rows[currentRowInTable][u'FS Night Landings'].replace(',', ''))
-        timeNight     = 0.0 if rows[currentRowInTable][u'Night'] == u'' else float(rows[currentRowInTable][u'Night'].replace(',', ''))
-        timeIMC       = 0.0 if rows[currentRowInTable][u'IMC'] == u'' else float(rows[currentRowInTable][u'IMC'].replace(',', ''))
-        timePIC       = 0.0 if rows[currentRowInTable][u'PIC'] == u'' else float(rows[currentRowInTable][u'PIC'].replace(',', ''))
-        timeSIC       = 0.0 if rows[currentRowInTable][u'SIC'] == u'' else float(rows[currentRowInTable][u'SIC'].replace(',', ''))
-        timeDual      = 0.0 if rows[currentRowInTable][u'Dual Received'] == u'' else float(rows[currentRowInTable][u'Dual Received'].replace(',', ''))
-        timeCFI       = 0.0 if rows[currentRowInTable][u'CFI'] == u'' else float(rows[currentRowInTable][u'CFI'].replace(',', ''))
+        dayLandings   = 0 if rows[currentRowInTable][u'FS Day Landings'] == u'' else locale.atoi(rows[currentRowInTable][u'FS Day Landings'])
+        nightLandings = 0 if rows[currentRowInTable][u'FS Night Landings'] == u'' else locale.atoi(rows[currentRowInTable][u'FS Night Landings'])
+        timeNight     = 0.0 if rows[currentRowInTable][u'Night'] == u'' else locale.atof(rows[currentRowInTable][u'Night'])
+        timeIMC       = 0.0 if rows[currentRowInTable][u'IMC'] == u'' else locale.atof(rows[currentRowInTable][u'IMC'])
+        timePIC       = 0.0 if rows[currentRowInTable][u'PIC'] == u'' else locale.atof(rows[currentRowInTable][u'PIC'])
+        timeSIC       = 0.0 if rows[currentRowInTable][u'SIC'] == u'' else locale.atof(rows[currentRowInTable][u'SIC'])
+        timeDual      = 0.0 if rows[currentRowInTable][u'Dual Received'] == u'' else locale.atof(rows[currentRowInTable][u'Dual Received'])
+        timeCFI       = 0.0 if rows[currentRowInTable][u'CFI'] == u'' else locale.atof(rows[currentRowInTable][u'CFI'])
 
         if rows[currentRowInTable][u'Category/Class'] in totalCategoryThisPage.keys():
             totalCategoryThisPage[rows[currentRowInTable][u'Category/Class']] += 1

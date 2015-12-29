@@ -7,6 +7,7 @@ import sys
 import re
 import datetime
 import math
+import locale
 
 #
 # Snippet below based on YAPTU, "Yet Another Python Templating Utility, Version 1.2"
@@ -199,18 +200,35 @@ def rowDateCompare(x, y):
 
     return 0
 
-def csvToTex(templatePath, csvfile, templatefile, outfile):
+def csvToTex(templatePath, csvfile, localeToUse, templatefile, outfile):
     global rows
 
-    # Sniff to detect delimiter
-    dialect = unicodecsv.Sniffer().sniff(csvfile.read(1024), ',;')
+    # NOTE: It is bad practice to just set a new locale and not reset it before returning.
+    # However, it doesn't make sense to reset it either and retrieving all locale settings is cumbersome.
+    locale.setlocale(locale.LC_ALL, localeToUse)
+
+    # Determine thousands-separator. We use the opposite of the decimal point because in some locales
+    # it may not be set even though it is present in the CSV data.
+    thousandsSeparator = ',' if locale.localeconv()['decimal_point'] == '.' else '.'
+
+    # Sniff to detect delimiter and other format parameters
+    sniffBuffer = csvfile.read(2048)
     csvfile.seek(0)
+
+    # Detect CSV dialect
+    dialect = unicodecsv.Sniffer().sniff(sniffBuffer, ',;')
 
     # We know that quotes need to be used
     dialect.quoting = csv.QUOTE_ALL
     dialect.doublequote = True
 
-    reader = unicodecsv.DictReader(csvfile, dialect=dialect, encoding='utf-8-sig')
+    # Detect file encoding
+    if sniffBuffer.startswith(codecs.BOM_UTF8):
+        encoding = 'utf-8-sig'
+    else:
+        encoding = 'utf-8'
+
+    reader = unicodecsv.DictReader(csvfile, dialect=dialect, encoding=encoding)
     rows = list(reader)
 
     # Check if first column is parsed incorrectly (the Date column keeps its quotes
@@ -255,6 +273,16 @@ def csvToTex(templatePath, csvfile, templatefile, outfile):
         rows[i][u'Route'] = texEscape(rows[i][u'Route'])
         rows[i][u'Flight Properties'] = texEscape(rows[i][u'Flight Properties'])
         rows[i][u'Comments'] = texEscape(rows[i][u'Comments'])
+
+        # Remove thousands-separator if it is present
+        rows[i][u'FS Day Landings'] = rows[i][u'FS Day Landings'].replace(thousandsSeparator, '')
+        rows[i][u'FS Night Landings'] = rows[i][u'FS Night Landings'].replace(thousandsSeparator, '')
+        rows[i][u'Night'] = rows[i][u'Night'].replace(thousandsSeparator, '')
+        rows[i][u'IMC'] = rows[i][u'IMC'].replace(thousandsSeparator, '')
+        rows[i][u'PIC'] = rows[i][u'PIC'].replace(thousandsSeparator, '')
+        rows[i][u'SIC'] = rows[i][u'SIC'].replace(thousandsSeparator, '')
+        rows[i][u'Dual Received'] = rows[i][u'Dual Received'].replace(thousandsSeparator, '')
+        rows[i][u'CFI'] = rows[i][u'CFI'].replace(thousandsSeparator, '')
 
     #------------------------------------------------------------------------
 

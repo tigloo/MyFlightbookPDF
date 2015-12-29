@@ -61,7 +61,7 @@ def compile():
 
         # Generate LateX output
         texFile = file(texFileName, 'w')
-        logbook.csvToTex(PATH_TO_TEMPLATES, inFile, file(templateFileName), texFile)
+        logbook.csvToTex(PATH_TO_TEMPLATES, inFile, request.form['locale'].encode('utf-8'), file(templateFileName), texFile)
         texFile.close()
 
         # Compile to PDF
