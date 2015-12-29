@@ -22,11 +22,14 @@
 #[
 _outf.write(u'\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}} ' % (globals()['_templatePath']))
 #]
-\fancyfoot[C]{\thepage}
+\fancyfoot[L]{\fontfamily{lmss}\selectfont Logbook format according to EASA Part FCL.050}
+\fancyfoot[R]{\fontfamily{lmss}\selectfont Page \thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
 \begin{document}
+
+\fontfamily{lmss}\selectfont
 
 \rowcolors{1}{white}{Snow2}
 \renewcommand{\arraystretch}{3.2}
@@ -54,7 +57,7 @@ totalCFILastPage = 0.0
 #[ while currentRowInTable < len(rows):
 
 \noindent\resizebox{\textwidth}{!}{
-    \begin{tabu}{|[1.5pt]m{0.015\textwidth}|l|l|m{0.07\textwidth}|l|m{0.07\textwidth}|m{0.14\textwidth}|m{0.1\textwidth}|m{0.2\textwidth}|l|L{5cm}|l|l|[1.5pt]m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|l|l|l|l|m{0.2\textwidth}|[1.5pt]}
+    \begin{tabu}{|[1.5pt]m{0.015\textwidth}|l|l|m{0.07\textwidth}|l|m{0.07\textwidth}|m{0.14\textwidth}|m{0.1\textwidth}|m{0.2\textwidth}|l|L{5cm}|l|l|[1.5pt]m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|l|l|l|m{0.08\textwidth}|m{0.25\textwidth}|[1.5pt]}
 
 \hiderowcolors
 
