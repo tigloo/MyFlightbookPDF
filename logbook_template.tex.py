@@ -98,7 +98,7 @@ for i in range(RowsPerPage):
         #
         # Parse flight time and calculate totals
         #
-        flightTime = 0.0 if rows[currentRowInTable][u'Total Flight Time'] == u'' else round(locale.atof(rows[currentRowInTable][u'Total Flight Time'])*60)/60
+        flightTime    = 0.0 if rows[currentRowInTable][u'Total Flight Time'] == u'' else round(locale.atof(rows[currentRowInTable][u'Total Flight Time'])*60)/60
         dayLandings   = 0 if rows[currentRowInTable][u'FS Day Landings'] == u'' else locale.atoi(rows[currentRowInTable][u'FS Day Landings'])
         nightLandings = 0 if rows[currentRowInTable][u'FS Night Landings'] == u'' else locale.atoi(rows[currentRowInTable][u'FS Night Landings'])
         timeNight     = 0.0 if rows[currentRowInTable][u'Night'] == u'' else round(locale.atof(rows[currentRowInTable][u'Night'])*60)/60
@@ -107,6 +107,8 @@ for i in range(RowsPerPage):
         timeSIC       = 0.0 if rows[currentRowInTable][u'SIC'] == u'' else round(locale.atof(rows[currentRowInTable][u'SIC'])*60)/60
         timeDual      = 0.0 if rows[currentRowInTable][u'Dual Received'] == u'' else round(locale.atof(rows[currentRowInTable][u'Dual Received'])*60)/60
         timeCFI       = 0.0 if rows[currentRowInTable][u'CFI'] == u'' else round(locale.atof(rows[currentRowInTable][u'CFI'])*60)/60
+        flightStart   = rows[currentRowInTable][u'Flight Start'] if rows[currentRowInTable][u'Engine Start'] == u'' else rows[currentRowInTable][u'Engine Start']
+        flightEnd     = rows[currentRowInTable][u'Flight End'] if rows[currentRowInTable][u'Engine End'] == u'' else rows[currentRowInTable][u'Engine End']
 
         if rows[currentRowInTable][u'Category/Class'] in totalCategoryThisPage.keys():
             totalCategoryThisPage[rows[currentRowInTable][u'Category/Class']] += 1
@@ -124,9 +126,9 @@ for i in range(RowsPerPage):
         totalCFIThisPage += timeCFI
 
         _outf.write((u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & & & & %s %s \\\\ ' % (currentRowInTable+1,
-            logDate.date().isoformat(), departureCode,
-            rows[currentRowInTable][u'Engine Start'], arrivalCode,
-            rows[currentRowInTable][u'Engine End'],
+            logDate.date().isoformat(),
+            departureCode, flightStart,
+            arrivalCode, flightEnd,
             rows[currentRowInTable][u'Model'],
             rows[currentRowInTable][u'Tail Number'],
             rows[currentRowInTable][u'Category/Class'],
