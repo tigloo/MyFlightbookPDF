@@ -113,10 +113,16 @@ for i in range(RowsPerPage):
         flightStart   = rows[currentRowInTable][u'Flight Start'] if rows[currentRowInTable][u'Engine Start'] == u'' else rows[currentRowInTable][u'Engine Start']
         flightEnd     = rows[currentRowInTable][u'Flight End'] if rows[currentRowInTable][u'Engine End'] == u'' else rows[currentRowInTable][u'Engine End']
 
-        if rows[currentRowInTable][u'Category/Class'] in totalCategoryThisPage.keys():
-            totalCategoryThisPage[rows[currentRowInTable][u'Category/Class']] += 1
+        #
+        # Remove text in parentheses from category names
+        # Convert: "Helicopter (R22)" to "Helicopter"
+        #
+        cleanCategory = re.sub(r'\([^)]*\)', '', rows[currentRowInTable][u'Category/Class']).strip()
+
+        if cleanCategory in totalCategoryThisPage.keys():
+            totalCategoryThisPage[cleanCategory] += 1
         else:
-            totalCategoryThisPage[rows[currentRowInTable][u'Category/Class']] = 1
+            totalCategoryThisPage[cleanCategory] = 1
 
         totalFlightTimeThisPage += flightTime
         totalDayLandingsThisPage += dayLandings
