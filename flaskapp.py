@@ -59,9 +59,18 @@ def compile():
         pdfFileName = tmpDir + '/output.pdf'
         templateFileName = PATH_TO_TEMPLATES + 'logbook_template.tex.py'
 
+        print request.form
+
+        pilotDetails = {}
+        pilotDetails[u'name'] = request.form['pilot_name']
+        pilotDetails[u'address1'] = request.form['address1']
+        pilotDetails[u'address2'] = request.form['address2']
+        pilotDetails[u'address3'] = request.form['address3']
+        pilotDetails[u'licenseNr'] = request.form['license_nr']
+
         # Generate LateX output
         texFile = file(texFileName, 'w')
-        logbook.csvToTex(PATH_TO_TEMPLATES, inFile, request.form['locale'].encode('utf-8'), file(templateFileName), texFile)
+        logbook.csvToTex(PATH_TO_TEMPLATES, inFile, pilotDetails, request.form['locale'].encode('utf-8'), file(templateFileName), texFile)
         texFile.close()
 
         # Compile to PDF

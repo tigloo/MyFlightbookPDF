@@ -41,15 +41,25 @@ Pilot's Logbook for
 \renewcommand{\arraystretch}{2}
 \begin{tabu}{|m{0.2\textwidth}m{0.2\textwidth}|}
 \hline
-Name: & \\
+#[
+_outf.write(('Name: & %s \\\\' % (_pilotDetails[u'name'])).encode('utf-8'))
+#]
 \cline{2-2}
-Address: & \\
+#[
+_outf.write(('Address: & %s \\\\' % (_pilotDetails[u'address1'])).encode('utf-8'))
+#]
 \cline{2-2}
- & \\
+#[
+_outf.write((' & %s \\\\' % (_pilotDetails[u'address2'])).encode('utf-8'))
+#]
 \cline{2-2}
-  & \\
+#[
+_outf.write((' & %s \\\\' % (_pilotDetails[u'address3'])).encode('utf-8'))
+#]
 \cline{2-2}
-License Number(s): & \\
+#[
+_outf.write(('License Number(s) & %s \\\\' % (_pilotDetails[u'licenseNr'])).encode('utf-8'))
+#]
 \cline{2-2}
  & \\
 \hline

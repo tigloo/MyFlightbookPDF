@@ -201,7 +201,7 @@ def rowDateCompare(x, y):
 
     return 0
 
-def csvToTex(templatePath, csvfile, localeToUse, templatefile, outfile):
+def csvToTex(templatePath, csvfile, pilotDetails, localeToUse, templatefile, outfile):
     global rows
 
     # NOTE: It is bad practice to just set a new locale and not reset it before returning.
@@ -295,15 +295,28 @@ def csvToTex(templatePath, csvfile, localeToUse, templatefile, outfile):
     # Read template and process it, output will be sent to stdout
     copyGlobals = globals()
     copyGlobals['_templatePath'] = templatePath
+    copyGlobals['_pilotDetails'] = pilotDetails
     copier = Copier(copyGlobals)
     copier.copyout(templatefile, outfile)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Logbook compiler for Myflightbook.com. Takes CSV files as input and translates it to TeX code.')
     parser.add_argument('--locale', help='Locale to use')
+    parser.add_argument('--pilotname', help='Pilot\'s name')
+    parser.add_argument('--address1', help='Address line 1')
+    parser.add_argument('--address2', help='Address line 2')
+    parser.add_argument('--address3', help='Address line 3')
+    parser.add_argument('--license', help='License number')
     parser.add_argument('csvfile', help='Input file to process')
 
     args = parser.parse_args()
 
+    pilotDetails = {}
+    pilotDetails[u'name'] = '' if args.pilotname == None else args.pilotname
+    pilotDetails[u'address1'] = '' if args.address1 == None else args.address1
+    pilotDetails[u'address2'] = '' if args.address1 == None else args.address2
+    pilotDetails[u'address3'] = '' if args.address1 == None else args.address3
+    pilotDetails[u'licenseNr'] = '' if args.address1 == None else args.license
+
     with open(args.csvfile, 'rb') as csvfile:
-        csvToTex('', csvfile, args.locale, file('logbook_template.tex.py'), sys.stdout)
+        csvToTex('', csvfile, pilotDetails, args.locale, file('logbook_template.tex.py'), sys.stdout)

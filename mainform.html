@@ -12,35 +12,42 @@
     <p>
        Choose the CSV file from your computer:<br> 
        <input name="csvfile" type="file" size="50" accept="*"> 
-      <select name="locale">
-        <option value="bg_BG">Bulgarian</option>
-        <option value="cs_CZ">Czech</option>
-        <option value="da_DK">Danish</option>
-        <option value="de_DE">German</option>
-        <option value="el_GR">Greek</option>
-        <option value="en_US" selected="selected">English</option>
-        <option value="es_ES">Spanish</option>
-        <option value="et_EE">Estonian</option>
-        <option value="fi_FI">Finnish</option>
-        <option value="fr_FR">French</option>
-        <option value="hr_HR">Croatian</option>
-        <option value="hu_HU">Hungarian</option>
-        <option value="it_IT">Italian</option>
-        <option value="lt_LT">Lithuanian</option>
-        <option value="lv_LV">Latvian</option>
-        <option value="nl_NL">Dutch</option>
-        <option value="no_NO">Norwegian</option>
-        <option value="pl_PL">Polish</option>
-        <option value="pt_PT">Portuguese</option>
-        <option value="ro_RO">Romanian</option>
-        <option value="ru_RU">Russian</option>
-        <option value="sk_SK">Slovak</option>
-        <option value="sl_SI">Slovenian</option>
-        <option value="sv_SE">Swedish</option>
-        <option value="tr_TR">Turkish</option>
-        <option value="zh_CN">Chinese</option>
-      </select>
+       <select name="locale">
+         <option value="bg_BG">Bulgarian</option>
+         <option value="cs_CZ">Czech</option>
+         <option value="da_DK">Danish</option>
+         <option value="de_DE">German</option>
+         <option value="el_GR">Greek</option>
+         <option value="en_US" selected="selected">English</option>
+         <option value="es_ES">Spanish</option>
+         <option value="et_EE">Estonian</option>
+         <option value="fi_FI">Finnish</option>
+         <option value="fr_FR">French</option>
+         <option value="hr_HR">Croatian</option>
+         <option value="hu_HU">Hungarian</option>
+         <option value="it_IT">Italian</option>
+         <option value="lt_LT">Lithuanian</option>
+         <option value="lv_LV">Latvian</option>
+         <option value="nl_NL">Dutch</option>
+         <option value="no_NO">Norwegian</option>
+         <option value="pl_PL">Polish</option>
+         <option value="pt_PT">Portuguese</option>
+         <option value="ro_RO">Romanian</option>
+         <option value="ru_RU">Russian</option>
+         <option value="sk_SK">Slovak</option>
+         <option value="sl_SI">Slovenian</option>
+         <option value="sv_SE">Swedish</option>
+         <option value="tr_TR">Turkish</option>
+         <option value="zh_CN">Chinese</option>
+       </select>
     </p>
+    <table>
+      <tr><td>Pilot's Name</td><td><input name="pilot_name" type="text"/></td></tr>
+      <tr><td>Address 1</td><td><input name="address1" type="text"/></td></tr>
+      <tr><td>Address 2</td><td><input name="address2" type="text"/></td></tr>
+      <tr><td>Address 3</td><td><input name="address3" type="text"/></td></tr>
+      <tr><td>License Number</td><td><input name="license_nr" type="text"/></td></tr>
+    </table>
     <button type="submit">Create PDF</button>
   </form>
   </main>
