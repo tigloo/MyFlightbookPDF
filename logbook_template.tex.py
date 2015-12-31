@@ -17,19 +17,48 @@
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
 \pagestyle{fancy}
+
 \fancyhead{}
-\fancyfoot{}
-#[
-_outf.write(u'\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}} ' % (globals()['_templatePath']))
-#]
-\fancyfoot[L]{\fontfamily{lmss}\selectfont Logbook format according to EASA Part FCL.050}
+\fancyfoot[L]{\fontfamily{lmss}\selectfont \small Logbook format according to EASA Part FCL.050}
 \fancyfoot[R]{\fontfamily{lmss}\selectfont Page \thepage}
+\fancyfoot[C]{\fontfamily{lmss}\selectfont \small Column 1 in local time, all others in UTC. Date format according to ISO 8601.}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
 \begin{document}
 
 \fontfamily{lmss}\selectfont
+
+\centerline{\includegraphics[width=0.6\textwidth]{myflightbook.png}}
+
+\vspace{10pt}
+
+\begin{center}
+\Large
+Pilot's Logbook for
+
+\vspace{10pt}
+\renewcommand{\arraystretch}{2}
+\begin{tabu}{|m{0.2\textwidth}m{0.2\textwidth}|}
+\hline
+Name: & \\
+\cline{2-2}
+Address: & \\
+\cline{2-2}
+ & \\
+\cline{2-2}
+  & \\
+\cline{2-2}
+License Number(s): & \\
+\cline{2-2}
+ & \\
+\hline
+\end{tabu}
+\end{center}
+
+\pagebreak
+
+\fancyhead[C]{\includegraphics[width=3cm]{myflightbook.png}}
 
 \rowcolors{1}{white}{Snow2}
 \renewcommand{\arraystretch}{3.2}
