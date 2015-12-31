@@ -134,8 +134,9 @@ for i in range(RowsPerPage):
 
         # Replace dashes in route with spaces to be able to work with airport codes separated by either spaces or dashes
         rows[currentRowInTable][u'Route'] = rows[currentRowInTable][u'Route'].replace('-', ' ')
-        departureCode = rows[currentRowInTable][u'Route'].split(' ')[0]
-        arrivalCode   = rows[currentRowInTable][u'Route'].split(' ')[-1]
+        route = rows[currentRowInTable][u'Route'].split(' ')
+        departureCode = route[0]
+        arrivalCode   = route[-1]
 
         #
         # Parse flight time and calculate totals
@@ -173,7 +174,7 @@ for i in range(RowsPerPage):
         totalDualThisPage += timeDual
         totalCFIThisPage += timeCFI
 
-        _outf.write((u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & & & & %s %s \\\\ ' % (currentRowInTable+1,
+        _outf.write((u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %d:%02d & & %i & %i & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & %d:%02d & & & & %s %s %s \\\\ ' % (currentRowInTable+1,
             logDate.date().isoformat(),
             departureCode, flightStart,
             arrivalCode, flightEnd,
@@ -189,7 +190,8 @@ for i in range(RowsPerPage):
             math.floor(timeDual), round(timeDual*60%60),
             math.floor(timeCFI), round(timeCFI*60%60),
             rows[currentRowInTable][u'Flight Properties'],
-            rows[currentRowInTable][u'Comments'])).encode('utf-8'))
+            rows[currentRowInTable][u'Comments'],
+            '' if len(route)<=2 else ('Route: ' + rows[currentRowInTable][u'Route']))).encode('utf-8'))
 
     _outf.write(u'\hline ')
 
