@@ -59,8 +59,6 @@ def compile():
         pdfFileName = tmpDir + '/output.pdf'
         templateFileName = PATH_TO_TEMPLATES + 'logbook_template.tex.py'
 
-        print request.form
-
         pilotDetails = {}
         pilotDetails[u'name'] = request.form['pilot_name']
         pilotDetails[u'address1'] = request.form['address1']
