@@ -30,7 +30,7 @@
 \fontfamily{lmss}\selectfont
 
 #[
-_outf.write('\centerline{\includegraphics[width=0.6\textwidth]{%s/myflightbook.png}}' % (_templatePath))
+_outf.write('\centerline{\includegraphics[width=0.6\\textwidth]{%smyflightbook.png}}' % (_templatePath))
 #]
 
 \vspace{10pt}
@@ -70,7 +70,9 @@ _outf.write(('License Number(s) & %s \\\\' % (_pilotDetails[u'licenseNr'])).enco
 
 \pagebreak
 
-\fancyhead[C]{\includegraphics[width=3cm]{myflightbook.png}}
+#[
+_outf.write('\fancyhead[C]{\includegraphics[width=3cm]{%smyflightbook.png}}' % (_templatePath))
+#]
 
 \rowcolors{1}{white}{Snow2}
 \renewcommand{\arraystretch}{3.2}
