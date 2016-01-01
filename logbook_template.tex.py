@@ -29,7 +29,9 @@
 
 \fontfamily{lmss}\selectfont
 
-\centerline{\includegraphics[width=0.6\textwidth]{myflightbook.png}}
+#[
+_outf.write('\centerline{\includegraphics[width=0.6\textwidth]{%s/myflightbook.png}}' % (_templatePath))
+#]
 
 \vspace{10pt}
 
