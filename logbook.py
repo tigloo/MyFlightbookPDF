@@ -294,6 +294,10 @@ def csvToTex(templatePath, csvfile, pilotDetails, localeToUse, templatefile, out
         rows[i][u'Dual Received'] = rows[i][u'Dual Received'].replace(thousandsSeparator, '')
         rows[i][u'CFI'] = rows[i][u'CFI'].replace(thousandsSeparator, '')
 
+    # Escape pilot details
+    for key in pilotDetails:
+        pilotDetails[key] = texEscape(pilotDetails[key])
+
     #------------------------------------------------------------------------
 
     # Read template and process it, output will be sent to stdout

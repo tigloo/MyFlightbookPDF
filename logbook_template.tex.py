@@ -71,7 +71,8 @@ _outf.write(('License Number(s) & %s \\\\' % (_pilotDetails[u'licenseNr'])).enco
 \pagebreak
 
 #[
-_outf.write('\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}}' % (_templatePath))
+_outf.write(('\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}}' % (_templatePath)).encode('utf-8'))
+_outf.write(('\\fancyhead[R]{\\fontfamily{lmss}\\selectfont \\small %s \\linebreak License Number(s): %s}' % (_pilotDetails[u'name'], _pilotDetails[u'licenseNr'])).encode('utf-8'))
 #]
 
 \rowcolors{1}{white}{Snow2}
