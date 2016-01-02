@@ -206,7 +206,11 @@ def csvToTex(templatePath, csvfile, pilotDetails, localeToUse, templatefile, out
 
     # NOTE: It is bad practice to just set a new locale and not reset it before returning.
     # However, it doesn't make sense to reset it either and retrieving all locale settings is cumbersome.
-    locale.setlocale(locale.LC_ALL, localeToUse)
+    try:
+        locale.setlocale(locale.LC_ALL, localeToUse)
+    except locale.Error:
+        # If we did not succeed in setting the locale, use en_US as default
+        locale.setlocale(locale.LC_ALL, 'en_US')
 
     # Determine thousands-separator. We use the opposite of the decimal point because in some locales
     # it may not be set even though it is present in the CSV data.

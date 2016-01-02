@@ -12,6 +12,10 @@ import sys
 import logging
 import StringIO
 
+LOCALES = [u"bg_BG", u"cs_CZ", u"da_DK", u"de_DE", u"el_GR", u"en_US", u"es_ES", u"et_EE", u"fi_FI", u"fr_FR",
+           u"hr_HR", u"hu_HU", u"it_IT", u"lt_LT", u"lv_LV", u"nl_NL", u"no_NO", u"pl_PL", u"pt_PT", u"ro_RO",
+           u"ru_RU", u"sk_SK", u"sl_SI", u"sv_SE", u"tr_TR", u"zh_CN"]
+
 # This is the path to pdflatex INCLUDING a trailing slash
 PATH_TO_PDFLATEX = ''
 PATH_TO_TEMPLATES = ''
@@ -38,6 +42,8 @@ def root():
 
 @app.route('/compile', methods=['POST'])
 def compile():
+    global LOCALES
+
     if request.method == 'POST':
         # Get uploaded input file
         inFile = request.files['csvfile']
@@ -66,9 +72,14 @@ def compile():
         pilotDetails[u'address3'] = request.form['address3']
         pilotDetails[u'licenseNr'] = request.form['license_nr']
 
+        # Validate locale
+        selectedLocale = 'en_US'
+        if request.form['locale'] in LOCALES:
+            selectedLocale = request.form['locale'].encode('utf-8')
+
         # Generate LateX output
         texFile = file(texFileName, 'w')
-        logbook.csvToTex(PATH_TO_TEMPLATES, inFile, pilotDetails, request.form['locale'].encode('utf-8'), file(templateFileName), texFile)
+        logbook.csvToTex(PATH_TO_TEMPLATES, inFile, pilotDetails, selectedLocale, file(templateFileName), texFile)
         texFile.close()
 
         # Compile to PDF
