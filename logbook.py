@@ -314,7 +314,7 @@ if __name__ == '__main__':
     parser.add_argument('--address1', help='Address line 1')
     parser.add_argument('--address2', help='Address line 2')
     parser.add_argument('--address3', help='Address line 3')
-    parser.add_argument('--license', help='License number')
+    parser.add_argument('--license', help='License number. Individual license numbers may be separated via semicolon (\';\')')
     parser.add_argument('csvfile', help='Input file to process')
 
     args = parser.parse_args()

@@ -40,7 +40,7 @@ _outf.write('\\centerline{\\includegraphics[width=0.6\\textwidth]{%smyflightbook
 Pilot's Logbook for
 
 \vspace{10pt}
-\renewcommand{\arraystretch}{2}
+\renewcommand{\arraystretch}{1.5}
 \begin{tabu}{|m{0.2\textwidth}m{0.2\textwidth}|}
 \hline
 #[
@@ -60,10 +60,17 @@ _outf.write((' & %s \\\\' % (_pilotDetails[u'address3'])).encode('utf-8'))
 #]
 \cline{2-2}
 #[
-_outf.write(('License Number(s) & %s \\\\' % (_pilotDetails[u'licenseNr'])).encode('utf-8'))
+if len(_pilotDetails[u'licenseNr']) > 1:
+    licenseStr = u''
+    for license in _pilotDetails[u'licenseNr'].split(';'):
+        licenseStr += '%s \\\\ \n & ' % license
+    licenseStr += '\\\\ \n'
+    _outf.write(('License Number(s): & %s' % (licenseStr)).encode('utf-8'))
+else:
+    _outf.write(('License Number(s): & \\\\').encode('utf-8'))
+    _outf.write(('\\cline{2-2} ').encode('utf-8'))
+    _outf.write((' & \\\\').encode('utf-8'))
 #]
-\cline{2-2}
- & \\
 \hline
 \end{tabu}
 \end{center}
