@@ -5,6 +5,10 @@ if [ ! -d "$OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive" ]; then
   pushd $OPENSHIFT_REPO_DIR
   unzip $OPENSHIFT_REPO_DIR/texlive.zip > /dev/null
   rm $OPENSHIFT_REPO_DIR/texlive.zip
+  echo TeXLive: Switching to nearest CTAN mirror...
+  $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet
+  echo TeXLive: Installing texliveonfly...
+  $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/tlmgr install texliveonfly
   popd  
   echo TeXLive: Done!
 fi
