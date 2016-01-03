@@ -1,6 +1,7 @@
 \documentclass{article}
 
 %\usepackage[utf8]{inputenc}
+\usepackage{lualatex-math}
 \usepackage{graphicx}
 \usepackage{tabu}
 \usepackage[table,x11names]{xcolor}
@@ -80,10 +81,16 @@ else:
 #[
 _outf.write(('\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}}' % (_templatePath)).encode('utf-8'))
 
-rightHeaderStr = _pilotDetails[u'name']
+rightHeaderStr = ''
 
-if len(_pilotDetails[u'name']) > 1 and len(_pilotDetails[u'licenseNr']) > 1:
-    rightHeaderStr += ' \\linebreak License Number(s): %s' % _pilotDetails[u'licenseNr']
+if len(_pilotDetails[u'name']) > 1:
+    rightHeaderStr = _pilotDetails[u'name']
+
+    if len(_pilotDetails[u'licenseNr']) > 1:
+        rightHeaderStr += ' \\linebreak License Number(s): %s' % _pilotDetails[u'licenseNr']
+else:
+    if len(_pilotDetails[u'licenseNr']) > 1:
+        rightHeaderStr += 'License Number(s): %s' % _pilotDetails[u'licenseNr']
 
 _outf.write(('\\fancyhead[R]{\\fontfamily{lmss}\\selectfont \\small %s}' % (rightHeaderStr)).encode('utf-8'))
 #]
