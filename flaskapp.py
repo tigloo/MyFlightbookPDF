@@ -16,15 +16,15 @@ LOCALES = [u"bg_BG", u"cs_CZ", u"da_DK", u"de_DE", u"el_GR", u"en_US", u"es_ES",
            u"hr_HR", u"hu_HU", u"it_IT", u"lt_LT", u"lv_LV", u"nl_NL", u"no_NO", u"pl_PL", u"pt_PT", u"ro_RO",
            u"ru_RU", u"sk_SK", u"sl_SI", u"sv_SE", u"tr_TR", u"zh_CN"]
 
-# This is the path to pdflatex INCLUDING a trailing slash
-PATH_TO_PDFLATEX = ''
+# This is the path to latex INCLUDING a trailing slash
+PATH_TO_LATEX = ''
 PATH_TO_TEMPLATES = ''
 if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
     PATH_TO_TEMPLATES = os.environ['OPENSHIFT_REPO_DIR']
-    PATH_TO_PDFLATEX = os.environ['OPENSHIFT_REPO_DIR'] + 'openshift-origin-cartridge-texlive-master/bin/x86_64-linux/'
-    if(os.path.isfile(PATH_TO_PDFLATEX + 'pdflatex') == False):
+    PATH_TO_LATEX = os.environ['OPENSHIFT_REPO_DIR'] + 'openshift-origin-cartridge-texlive-master/bin/x86_64-linux/'
+    if(os.path.isfile(PATH_TO_LATEX + 'lualatex') == False):
         # Seemingly we do not run on OpenShift, so assume that pdfLateX is in the path
-        PATH_TO_PDFLATEX = ''
+        PATH_TO_LATEX = ''
 
 # __file__ refers to the file settings.py 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))  # refers to application_top
@@ -83,7 +83,7 @@ def compile():
         texFile.close()
 
         # Compile to PDF
-        call(["%spdflatex" % (PATH_TO_PDFLATEX), "-interaction=nonstopmode", "-halt-on-error", "-output-directory=%s" % (tmpDir), texFileName])
+        call(["%slualatex" % (PATH_TO_LATEX), "--interaction=nonstopmode", "--output-directory=%s" % (tmpDir), texFileName])
 
         pdfFile = file(pdfFileName, 'r')
         result = pdfFile.read()
