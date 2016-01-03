@@ -79,7 +79,13 @@ else:
 
 #[
 _outf.write(('\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}}' % (_templatePath)).encode('utf-8'))
-_outf.write(('\\fancyhead[R]{\\fontfamily{lmss}\\selectfont \\small %s \\linebreak License Number(s): %s}' % (_pilotDetails[u'name'], _pilotDetails[u'licenseNr'])).encode('utf-8'))
+
+rightHeaderStr = _pilotDetails[u'name']
+
+if len(_pilotDetails[u'name']) > 1 and len(_pilotDetails[u'licenseNr']) > 1:
+    rightHeaderStr += ' \\linebreak License Number(s): %s' % _pilotDetails[u'licenseNr']
+
+_outf.write(('\\fancyhead[R]{\\fontfamily{lmss}\\selectfont \\small %s}' % (rightHeaderStr)).encode('utf-8'))
 #]
 
 \rowcolors{1}{white}{Snow2}
