@@ -9,6 +9,27 @@
 \usepackage{pifont}
 \usepackage{pbox}
 
+\usepackage{ifxetex,ifluatex}
+
+\newif\ifunicode
+\ifxetex\unicodetrue\else\ifluatex\unicodetrue\fi\fi
+
+\ifunicode
+  \usepackage{unicode-math}
+  \setmainfont[Ligatures=TeX,Fractions=On]{XITS}
+  \setmathfont{XITS Math}
+
+  \makeatletter
+  \let\@@@frac\frac
+  \def\frac#1#2{\sbox0{#1/#2}\sbox2{#1\phantom{/}#2}%
+    \ifdim\wd0=\wd2 % no corresponding character
+      \@@@frac{#1}{#2}%
+    \else
+      \mbox{#1/#2}%
+    \fi}
+  \makeatother
+\fi
+
 \usepackage[a4paper,landscape,left=1cm,right=1cm,headheight=40pt,foot=80pt]{geometry}
 
 \usepackage{multirow}
