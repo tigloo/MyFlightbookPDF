@@ -1,7 +1,6 @@
 \documentclass{article}
 
 %\usepackage[utf8]{inputenc}
-\usepackage{lualatex-math}
 \usepackage{graphicx}
 \usepackage{tabu}
 \usepackage[table,x11names]{xcolor}
