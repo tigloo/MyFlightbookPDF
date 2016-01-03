@@ -11,6 +11,8 @@ if [ ! -d "$OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive" ]; then
   $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet
   echo TeXLive: Installing texliveonfly...
   $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/tlmgr install texliveonfly
+  echo TeXLive: Installing other required packages...
+  $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/tlmgr install luatex lualibs
   popd  
   echo TeXLive: Done!
 fi
