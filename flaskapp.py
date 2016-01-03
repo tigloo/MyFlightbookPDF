@@ -22,7 +22,7 @@ PATH_TO_TEMPLATES = ''
 if 'OPENSHIFT_REPO_DIR' in os.environ.keys():
     PATH_TO_TEMPLATES = os.environ['OPENSHIFT_REPO_DIR']
     PATH_TO_LATEX = os.environ['OPENSHIFT_REPO_DIR'] + 'openshift-origin-cartridge-texlive-master/bin/x86_64-linux/'
-    if(os.path.isfile(PATH_TO_LATEX + 'lualatex') == False):
+    if(os.path.isfile(PATH_TO_LATEX + 'texliveonfly') == False):
         # Seemingly we do not run on OpenShift, so assume that pdfLateX is in the path
         PATH_TO_LATEX = ''
 
@@ -83,7 +83,7 @@ def compile():
         texFile.close()
 
         # Compile to PDF
-        call(["%slualatex" % (PATH_TO_LATEX), "--interaction=nonstopmode", "--output-directory=%s" % (tmpDir), texFileName])
+        call(["%stexliveonfly" % (PATH_TO_LATEX), "--compiler=lualatex", "--arguments=--output-directory=%s" % (tmpDir), texFileName])
 
         pdfFile = file(pdfFileName, 'r')
         result = pdfFile.read()
