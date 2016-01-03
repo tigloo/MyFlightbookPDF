@@ -84,9 +84,9 @@ def compile():
 
         # Compile to PDF
         if len(PATH_TO_LATEX) > 1:
-            call(["%stexliveonfly" % (PATH_TO_LATEX), "--texlive_bin=%s" % (PATH_TO_LATEX), "--compiler=xelatex", "--arguments=--output-directory=%s" % (tmpDir), texFileName])
+            call(["%stexliveonfly" % (PATH_TO_LATEX), "--texlive_bin=%s" % (PATH_TO_LATEX), "--compiler=lualatex", "--arguments=--output-directory=%s" % (tmpDir), texFileName])
         else:
-            call(["%stexliveonfly" % (PATH_TO_LATEX), "--compiler=xelatex", "--arguments=--output-directory=%s" % (tmpDir), texFileName])
+            call(["%stexliveonfly" % (PATH_TO_LATEX), "--compiler=lualatex", "--arguments=--output-directory=%s" % (tmpDir), texFileName])
 
         pdfFile = file(pdfFileName, 'r')
         result = pdfFile.read()
