@@ -138,23 +138,22 @@ rows = []
 #---------------------------------------------------------------------
 
 def texEscape(text):
-    CHARS = [
-        [u'\\', u'\\letterbackslash{}'],
-        [u'&',  u'\\&'],
-        [u'%',  u'\\%'],
-        [u'$',  u'\\$'],
-        [u'#',  u'\\#'],
-        [u'_',  u'\\letterunderscore{}'],
-        [u'{',  u'\\letteropenbrace{}'],
-        [u'}',  u'\\letterclosebrace{}'],
-        [u'~',  u'\\lettertilde{}'],
-        [u'^',  u'\\letterhat{}']
-    ]
+    CHARS = {
+        u'\\': u'\\textbackslash{}',
+        u'&':  u'\\&',
+        u'%':  u'\\%',
+        u'$':  u'\\$',
+        u'#':  u'\\#',
+        u'_':  u'\\_',
+        u'{':  u'\\{',
+        u'}':  u'\\}',
+        u'~':  u'\\textasciitilde{}',
+        u'^':  u'\\textasciicircum{}'
+    }
 
-    retval = text
-
-    for i in range(len(CHARS)):
-        retval = retval.replace(CHARS[i][0], CHARS[i][1])
+    CHARS = dict((re.escape(k), v) for k, v in CHARS.iteritems())
+    pattern = re.compile("|".join(CHARS.keys()))
+    retval = pattern.sub(lambda m: CHARS[re.escape(m.group(0))], text)
 
     return retval
 
