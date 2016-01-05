@@ -7,7 +7,11 @@
 \usepackage{fancyhdr}
 \usepackage{pifont}
 \usepackage{pbox}
+\usepackage{fontspec}
 
+%
+% Define ligatures for simple fractions
+%
 \usepackage{ifxetex,ifluatex}
 
 \newif\ifunicode
@@ -15,8 +19,20 @@
 
 \ifunicode
   \usepackage{unicode-math}
-  \setmainfont[Ligatures=TeX,Fractions=On]{XITS}
-  \setmathfont{XITS Math}
+  \setmainfont
+  [    Extension = .otf,
+     UprightFont = *-regular,
+        BoldFont = *-bold,
+      ItalicFont = *-italic,
+  BoldItalicFont = *-bolditalic,
+  Ligatures=TeX,
+  Fractions=On
+  ]{xits}
+
+  \setmathfont
+  [    Extension = .otf,
+        BoldFont = *bold,
+  ]{xits-math}
 
   \makeatletter
   \let\@@@frac\frac
@@ -29,6 +45,8 @@
   \makeatother
 \fi
 
+\renewcommand{\familydefault}{\sfdefault}
+
 \usepackage[a4paper,landscape,left=1cm,right=1cm,headheight=40pt,foot=80pt]{geometry}
 
 \usepackage{multirow}
@@ -40,15 +58,13 @@
 \pagestyle{fancy}
 
 \fancyhead{}
-\fancyfoot[L]{\fontfamily{lmss}\selectfont \small Logbook format according to EASA Part FCL.050}
-\fancyfoot[R]{\fontfamily{lmss}\selectfont Page \thepage}
-\fancyfoot[C]{\fontfamily{lmss}\selectfont \small Column 1 in local time, all others in UTC. Date format according to ISO 8601.}
+\fancyfoot[L]{\small Logbook format according to EASA Part FCL.050}
+\fancyfoot[R]{Page \thepage}
+\fancyfoot[C]{\small Column 1 in local time, all others in UTC. Date format according to ISO 8601.}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
 \begin{document}
-
-\fontfamily{lmss}\selectfont
 
 #[
 _outf.write('\\centerline{\\includegraphics[width=0.6\\textwidth]{%smyflightbook.png}}' % (_templatePath))
@@ -112,7 +128,7 @@ else:
     if len(_pilotDetails[u'licenseNr']) > 1:
         rightHeaderStr += 'License Number(s): %s' % _pilotDetails[u'licenseNr']
 
-_outf.write(('\\fancyhead[R]{\\fontfamily{lmss}\\selectfont \\small %s}' % (rightHeaderStr)).encode('utf-8'))
+_outf.write(('\\fancyhead[R]{\\small %s}' % (rightHeaderStr)).encode('utf-8'))
 #]
 
 \rowcolors{1}{white}{Snow2}
