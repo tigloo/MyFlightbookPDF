@@ -12,7 +12,7 @@ if [ ! -d "$OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive" ]; then
   echo TeXLive: Installing texliveonfly...
   $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/tlmgr install texliveonfly
   echo TeXLive: Installing other required packages...
-  $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/tlmgr install luatex lualibs euenc fontspec iftex kastrup l3kernel l3packages luaotfload ucharcat unicode-math etoolbox filehook lualatex-math xunicode xits fontspec
+  $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/tlmgr install luatex lualibs xetex euenc fontspec iftex kastrup l3kernel l3packages luaotfload ucharcat unicode-math etoolbox filehook lualatex-math xunicode xits fontspec
   popd  
   echo TeXLive: Done!
 fi
