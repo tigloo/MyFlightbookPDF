@@ -8,43 +8,12 @@
 \usepackage{pifont}
 \usepackage{pbox}
 \usepackage{fontspec}
+\usepackage{unicode-math}
 
-%
-% Define ligatures for simple fractions
-%
-\usepackage{ifxetex,ifluatex}
-
-\newif\ifunicode
-\ifxetex\unicodetrue\else\ifluatex\unicodetrue\fi\fi
-
-\ifunicode
-  \usepackage{unicode-math}
-  \setmainfont
-  [    Extension = .otf,
-     UprightFont = *-regular,
-        BoldFont = *-bold,
-      ItalicFont = *-italic,
-  BoldItalicFont = *-bolditalic,
-  Ligatures=TeX,
-  Fractions=On
-  ]{xits}
-
-  \setmathfont
-  [    Extension = .otf,
-        BoldFont = *bold,
-  ]{xits-math}
-
-  \makeatletter
-  \let\@@@frac\frac
-  \def\frac#1#2{\sbox0{#1/#2}\sbox2{#1\phantom{/}#2}%
-    \ifdim\wd0=\wd2 % no corresponding character
-      \@@@frac{#1}{#2}%
-    \else
-      \mbox{#1/#2}%
-    \fi}
-  \makeatother
-\fi
-
+\setmainfont[Ligatures=TeX,Extension=.otf]{FreeSerif}
+\setsansfont[Ligatures=TeX,Extension=.otf]{FreeSans}
+\setmonofont[Ligatures=TeX,Extension=.otf]{FreeMono}
+\setmathfont[Extension = .otf, BoldFont = *bold]{xits-math}
 \renewcommand{\familydefault}{\sfdefault}
 
 \usepackage[a4paper,landscape,left=1cm,right=1cm,headheight=40pt,foot=80pt]{geometry}
