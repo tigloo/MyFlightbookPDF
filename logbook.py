@@ -137,6 +137,10 @@ class Copier:
 rows = []
 #---------------------------------------------------------------------
 
+#
+# Escape LaTeX control sequences in input variable text so that the
+# string can be rendered as is. Returns the escaped string.
+#
 def texEscape(text):
     CHARS = {
         u'\\': u'\\textbackslash{}',
@@ -158,48 +162,19 @@ def texEscape(text):
     return retval
 
 #
-# Returns -1 for x < y
-# Returns 0 for x == y
-# Returns 1 for x > y
-def rowDateCompare(x, y):
-    xDateStr = x[u'Date']
-    xEngineStartStr = x[u'Engine Start'] if u'Engine Start' in x.keys() else u''
-    xFlightStartStr = x[u'Flight Start'] if u'Flight Start' in x.keys() else u''
-
-    xDate = datetime.datetime.strptime(xDateStr, '%Y-%m-%d')
-    xEngineStart = datetime.datetime.strptime(xEngineStartStr, '%Y-%m-%d %H:%M:%SZ') if xEngineStartStr != u'' else datetime.datetime.min
-    xFlightStart = datetime.datetime.strptime(xFlightStartStr, '%Y-%m-%d %H:%M:%SZ') if xFlightStartStr != u'' else datetime.datetime.min
-
-    yDateStr = y[u'Date']
-    yEngineStartStr = y[u'Engine Start'] if u'Engine Start' in y.keys() else u''
-    yFlightStartStr = y[u'Flight Start'] if u'Flight Start' in y.keys() else u''
-
-    yDate = datetime.datetime.strptime(yDateStr, '%Y-%m-%d')
-    yEngineStart = datetime.datetime.strptime(yEngineStartStr, '%Y-%m-%d %H:%M:%SZ') if yEngineStartStr != u'' else datetime.datetime.min
-    yFlightStart = datetime.datetime.strptime(yFlightStartStr, '%Y-%m-%d %H:%M:%SZ') if yFlightStartStr != u'' else datetime.datetime.min
-
-    if xDate < yDate:
-        return -1
-
-    if xDate > yDate:
-        return 1
-
-    # Flight dates are equal, sort by engine start
-    if xEngineStart < yEngineStart:
-        return -1
-
-    if xEngineStart > yEngineStart:
-        return 1
-
-    # Engine start dates are equal (probably due to being datetime.min), sort by flight start
-    if xFlightStart < yFlightStart:
-        return -1
-
-    if xFlightStart > yFlightStart:
-        return 1
-
-    return 0
-
+# Takes a CSV file and transforms it to a TeX file which can subsequently be rendered
+# by LaTeX / XeTeX / LuaLaTeX.
+#
+# Makes use of several global variables ("rows" and data passed via _globals) to exchange
+# data with the code embedded in the template.
+#
+# templatePath  - Path to where the template data is stored. Must end in a slash or be empty.
+# csvfile       - File handle of the CSV file.
+# pilotDetails  - Information about the pilot - data is used by the template
+# localeToUse   - Locale which is used to parse the CSV data (impacts decimal parsing)
+# templatefile  - File handle of the template file itself
+# outfile       - File handle of the TeX output
+#
 def csvToTex(templatePath, csvfile, pilotDetails, localeToUse, templatefile, outfile):
     global rows
 
