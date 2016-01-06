@@ -45,6 +45,17 @@ def initConfiguration():
     setConfigurationOption(CONF_FRACTIONS, False)
 
 #
+# Takes a float that contains a duration (flight time, time on condition, etc.)
+# and returns a formatted string, either of the form HH:MM or as fraction of hours.
+# The format is chosen depending on the current configuration.
+#
+def durationToString(duration):
+    if getConfigurationOption(CONF_FRACTIONS):
+        return u'%.2f' % duration
+    else:
+        return u'%d:%02d' % (math.floor(duration), round(duration*60%60))
+
+#
 # Snippet below based on YAPTU, "Yet Another Python Templating Utility, Version 1.2"
 #
 # Originally from
