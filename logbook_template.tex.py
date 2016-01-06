@@ -29,7 +29,11 @@
 \fancyhead{}
 \fancyfoot[L]{\small Logbook format according to EASA Part FCL.050}
 \fancyfoot[R]{Page \thepage}
+#[ if getConfigurationOption(CONF_UTCONLY):
+\fancyfoot[C]{\small All dates and times in UTC.}
+#| else:
 \fancyfoot[C]{\small Column 1 in local time, all others in UTC. Date format according to ISO 8601.}
+#]
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
@@ -160,7 +164,7 @@ for i in range(RowsPerPage):
         _outf.write(u' & & & & & & & & & & & & & & & & & & & & & & \\\\')
     else:
         # The CSV export contains different date formats, so parse them individually
-        logDate = datetime.datetime.strptime(rows[currentRowInTable][u'Date'], '%Y-%m-%d')
+        logDate = datetime.datetime.strptime(rows[currentRowInTable][u'Date'], '%Y-%m-%d').date().isoformat()
 
         # Replace dashes in route with spaces to be able to work with airport codes separated by either spaces or dashes
         rows[currentRowInTable][u'Route'] = rows[currentRowInTable][u'Route'].replace('-', ' ')
@@ -184,6 +188,20 @@ for i in range(RowsPerPage):
         flightEnd     = rows[currentRowInTable][u'Flight End'] if rows[currentRowInTable][u'Engine End'] == u'' else rows[currentRowInTable][u'Engine End']
 
         #
+        # In case we use the simplified UTC-only format, we will use flight start date as the log date (if available)
+        # and reformat flight start and flight end to ONLY contain the time in HH:MM
+        #
+        if getConfigurationOption(CONF_UTCONLY):
+            if flightStart != u'':
+                dtFlightStart = datetime.datetime.strptime(flightStart, '%Y-%m-%d %H:%M:%SZ')
+                logDate = dtFlightStart.date().isoformat()
+                flightStart = dtFlightStart.time().strftime('%H:%M')
+
+            if flightEnd != u'':
+                dtFlightEnd = datetime.datetime.strptime(flightEnd, '%Y-%m-%d %H:%M:%SZ')
+                flightEnd = dtFlightEnd.time().strftime('%H:%M')
+
+        #
         # Remove text in parentheses from category names
         # Convert: "Helicopter (R22)" to "Helicopter"
         #
@@ -205,7 +223,7 @@ for i in range(RowsPerPage):
         totalCFIThisPage += timeCFI
 
         _outf.write((u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & & %i & %i & %s & %s & %s & %s & %s & %s & & & & %s %s %s \\\\ ' % (currentRowInTable+1,
-            logDate.date().isoformat(),
+            logDate,
             departureCode, flightStart,
             arrivalCode, flightEnd,
             rows[currentRowInTable][u'Model'],
