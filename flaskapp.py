@@ -42,8 +42,6 @@ def root():
 
 @app.route('/compile', methods=['POST'])
 def compile():
-    global LOCALES
-
     if request.method == 'POST':
         # Get uploaded input file
         inFile = request.files['csvfile']
@@ -65,12 +63,19 @@ def compile():
         pdfFileName = tmpDir + '/output.pdf'
         templateFileName = PATH_TO_TEMPLATES + 'logbook_template.tex.py'
 
-        pilotDetails = {}
-        pilotDetails[u'name'] = request.form['pilot_name']
-        pilotDetails[u'address1'] = request.form['address1']
-        pilotDetails[u'address2'] = request.form['address2']
-        pilotDetails[u'address3'] = request.form['address3']
-        pilotDetails[u'licenseNr'] = request.form['license_nr']
+        #
+        # Initialize and set logbook configuration
+        #
+        logbook.initConfiguration()
+
+        logbook.setConfigurationOption(logbook.CONF_PILOT_NAME, request.form['pilot_name'])
+        logbook.setConfigurationOption(logbook.CONF_PILOT_ADDRESS1, request.form['address1'])
+        logbook.setConfigurationOption(logbook.CONF_PILOT_ADDRESS2, request.form['address2'])
+        logbook.setConfigurationOption(logbook.CONF_PILOT_ADDRESS3, request.form['address3'])
+        logbook.setConfigurationOption(logbook.CONF_PILOT_LICENSE_NR, request.form['license_nr'])
+
+        logbook.setConfigurationOption(logbook.CONF_UTCONLY, 'utconly' in request.form)
+        logbook.setConfigurationOption(logbook.CONF_FRACTIONS, 'fractions' in request.form)
 
         # Validate locale
         selectedLocale = 'en_US'
@@ -79,7 +84,7 @@ def compile():
 
         # Generate LateX output
         texFile = file(texFileName, 'w')
-        logbook.csvToTex(PATH_TO_TEMPLATES, inFile, pilotDetails, selectedLocale, file(templateFileName), texFile)
+        logbook.csvToTex(PATH_TO_TEMPLATES, inFile, selectedLocale, file(templateFileName), texFile)
         texFile.close()
 
         # Compile to PDF

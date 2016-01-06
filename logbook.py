@@ -10,6 +10,40 @@ import math
 import locale
 import argparse
 
+CONF_PILOT_NAME         = u'pilot_name'
+CONF_PILOT_ADDRESS1     = u'pilot_address1'
+CONF_PILOT_ADDRESS2     = u'pilot_address2'
+CONF_PILOT_ADDRESS3     = u'pilot_address3'
+CONF_PILOT_LICENSE_NR   = u'pilot_licensenr'
+
+CONF_UTCONLY            = u'utc_only'               # Only use UTC dates and use flight start / engine start as date of flight
+CONF_FRACTIONS          = u'fractions'              # Instead of HH:MM, use fractions of hours
+
+# Global variable for configuration storage
+CONFIGURATION_OPTIONS   = {}
+
+def setConfigurationOption(option, value):
+    global CONFIGURATION_OPTIONS
+
+    # Escape if necessary
+    if option in [CONF_PILOT_NAME, CONF_PILOT_ADDRESS1, CONF_PILOT_ADDRESS2, CONF_PILOT_ADDRESS3, CONF_PILOT_LICENSE_NR]:
+        value = texEscape(value)
+
+    CONFIGURATION_OPTIONS[option] = value
+
+def getConfigurationOption(option):
+    if option in CONFIGURATION_OPTIONS.keys():
+        return CONFIGURATION_OPTIONS[option]
+    else:
+        return None
+
+def initConfiguration():
+    # Default to using local time for log date and UTC for engine&flight start/end
+    setConfigurationOption(CONF_UTCONLY, False)
+
+    # Default to showing HH:MM instead of fractions
+    setConfigurationOption(CONF_FRACTIONS, False)
+
 #
 # Snippet below based on YAPTU, "Yet Another Python Templating Utility, Version 1.2"
 #
@@ -175,7 +209,7 @@ def texEscape(text):
 # templatefile  - File handle of the template file itself
 # outfile       - File handle of the TeX output
 #
-def csvToTex(templatePath, csvfile, pilotDetails, localeToUse, templatefile, outfile):
+def csvToTex(templatePath, csvfile, localeToUse, templatefile, outfile):
     global rows
 
     # NOTE: It is bad practice to just set a new locale and not reset it before returning.
@@ -268,20 +302,17 @@ def csvToTex(templatePath, csvfile, pilotDetails, localeToUse, templatefile, out
         rows[i][u'Dual Received'] = rows[i][u'Dual Received'].replace(thousandsSeparator, '')
         rows[i][u'CFI'] = rows[i][u'CFI'].replace(thousandsSeparator, '')
 
-    # Escape pilot details
-    for key in pilotDetails:
-        pilotDetails[key] = texEscape(pilotDetails[key])
-
     #------------------------------------------------------------------------
 
     # Read template and process it, output will be sent to stdout
     copyGlobals = globals()
     copyGlobals['_templatePath'] = templatePath
-    copyGlobals['_pilotDetails'] = pilotDetails
     copier = Copier(copyGlobals)
     copier.copyout(templatefile, outfile)
 
 if __name__ == '__main__':
+    initConfiguration()
+
     parser = argparse.ArgumentParser(description='Logbook compiler for Myflightbook.com. Takes CSV files as input and translates it to TeX code.')
     parser.add_argument('--locale', help='Locale to use')
     parser.add_argument('--pilotname', help='Pilot\'s name')
@@ -289,16 +320,19 @@ if __name__ == '__main__':
     parser.add_argument('--address2', help='Address line 2')
     parser.add_argument('--address3', help='Address line 3')
     parser.add_argument('--license', help='License number. Individual license numbers may be separated via semicolon (\';\')')
+    parser.add_argument('--utconly', action='store_true', help='Use a simplified, UTC-only date and time format')
+    parser.add_argument('--fractions', action='store_true', help='Show fractions instead of HH:MM times')
     parser.add_argument('csvfile', help='Input file to process')
 
     args = parser.parse_args()
 
-    pilotDetails = {}
-    pilotDetails[u'name'] = '' if args.pilotname == None else args.pilotname
-    pilotDetails[u'address1'] = '' if args.address1 == None else args.address1
-    pilotDetails[u'address2'] = '' if args.address1 == None else args.address2
-    pilotDetails[u'address3'] = '' if args.address1 == None else args.address3
-    pilotDetails[u'licenseNr'] = '' if args.address1 == None else args.license
+    setConfigurationOption(CONF_PILOT_NAME, args.pilotname)
+    setConfigurationOption(CONF_PILOT_ADDRESS1, args.address1)
+    setConfigurationOption(CONF_PILOT_ADDRESS2, args.address2)
+    setConfigurationOption(CONF_PILOT_ADDRESS3, args.address3)
+    setConfigurationOption(CONF_PILOT_LICENSE_NR, args.license)
+    setConfigurationOption(CONF_UTCONLY, args.utconly)
+    setConfigurationOption(CONF_FRACTIONS, args.fractions)
 
     with open(args.csvfile, 'rb') as csvfile:
-        csvToTex('', csvfile, pilotDetails, args.locale, file('logbook_template.tex.py'), sys.stdout)
+        csvToTex('', csvfile, args.locale, file('logbook_template.tex.py'), sys.stdout)

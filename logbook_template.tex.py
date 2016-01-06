@@ -50,25 +50,25 @@ Pilot's Logbook for
 \begin{tabu}{|m{0.2\textwidth}m{0.2\textwidth}|}
 \hline
 #[
-_outf.write(('Name: & %s \\\\' % (_pilotDetails[u'name'])).encode('utf-8'))
+_outf.write(('Name: & %s \\\\' % getConfigurationOption(CONF_PILOT_NAME)).encode('utf-8'))
 #]
 \cline{2-2}
 #[
-_outf.write(('Address: & %s \\\\' % (_pilotDetails[u'address1'])).encode('utf-8'))
+_outf.write(('Address: & %s \\\\' % getConfigurationOption(CONF_PILOT_ADDRESS1)).encode('utf-8'))
 #]
 \cline{2-2}
 #[
-_outf.write((' & %s \\\\' % (_pilotDetails[u'address2'])).encode('utf-8'))
+_outf.write((' & %s \\\\' % getConfigurationOption(CONF_PILOT_ADDRESS2)).encode('utf-8'))
 #]
 \cline{2-2}
 #[
-_outf.write((' & %s \\\\' % (_pilotDetails[u'address3'])).encode('utf-8'))
+_outf.write((' & %s \\\\' % getConfigurationOption(CONF_PILOT_ADDRESS3)).encode('utf-8'))
 #]
 \cline{2-2}
 #[
-if len(_pilotDetails[u'licenseNr']) > 1:
+if len(getConfigurationOption(CONF_PILOT_LICENSE_NR)) > 1:
     licenseStr = u''
-    for license in _pilotDetails[u'licenseNr'].split(';'):
+    for license in getConfigurationOption(CONF_PILOT_LICENSE_NR).split(';'):
         licenseStr += '%s \\\\ \n & ' % license
     licenseStr += '\\\\ \n'
     _outf.write(('License Number(s): & %s' % (licenseStr)).encode('utf-8'))
@@ -88,14 +88,14 @@ _outf.write(('\\fancyhead[C]{\\includegraphics[width=3cm]{%smyflightbook.png}}' 
 
 rightHeaderStr = ''
 
-if len(_pilotDetails[u'name']) > 1:
-    rightHeaderStr = _pilotDetails[u'name']
+if len(getConfigurationOption(CONF_PILOT_NAME)) > 1:
+    rightHeaderStr = getConfigurationOption(CONF_PILOT_NAME)
 
-    if len(_pilotDetails[u'licenseNr']) > 1:
-        rightHeaderStr += ' \\linebreak License Number(s): %s' % _pilotDetails[u'licenseNr']
+    if len(getConfigurationOption(CONF_PILOT_LICENSE_NR)) > 1:
+        rightHeaderStr += ' \\linebreak License Number(s): %s' % getConfigurationOption(CONF_PILOT_LICENSE_NR)
 else:
-    if len(_pilotDetails[u'licenseNr']) > 1:
-        rightHeaderStr += 'License Number(s): %s' % _pilotDetails[u'licenseNr']
+    if len(getConfigurationOption(CONF_PILOT_LICENSE_NR)) > 1:
+        rightHeaderStr += 'License Number(s): %s' % getConfigurationOption(CONF_PILOT_LICENSE_NR)
 
 _outf.write(('\\fancyhead[R]{\\small %s}' % (rightHeaderStr)).encode('utf-8'))
 #]
