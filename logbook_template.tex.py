@@ -186,6 +186,7 @@ for i in range(RowsPerPage):
         timeCFI       = 0.0 if rows[currentRowInTable][u'CFI'] == u'' else round(locale.atof(rows[currentRowInTable][u'CFI'])*60)/60
         flightStart   = rows[currentRowInTable][u'Flight Start'] if rows[currentRowInTable][u'Engine Start'] == u'' else rows[currentRowInTable][u'Engine Start']
         flightEnd     = rows[currentRowInTable][u'Flight End'] if rows[currentRowInTable][u'Engine End'] == u'' else rows[currentRowInTable][u'Engine End']
+        nameOfPIC     = rows[currentRowInTable][u'Name of PIC'] if u'Name of PIC' in rows[currentRowInTable].keys() else u''
 
         #
         # In case we use the simplified UTC-only format, we will use flight start date as the log date (if available)
@@ -222,7 +223,7 @@ for i in range(RowsPerPage):
         totalDualThisPage += timeDual
         totalCFIThisPage += timeCFI
 
-        _outf.write((u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & & %i & %i & %s & %s & %s & %s & %s & %s & & & & %s %s %s \\\\ ' % (currentRowInTable+1,
+        _outf.write((u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %i & %i & %s & %s & %s & %s & %s & %s & & & & %s %s %s \\\\ ' % (currentRowInTable+1,
             logDate,
             departureCode, flightStart,
             arrivalCode, flightEnd,
@@ -230,6 +231,7 @@ for i in range(RowsPerPage):
             rows[currentRowInTable][u'Tail Number'],
             rows[currentRowInTable][u'Category/Class'],
             durationToString(flightTime),
+            nameOfPIC,
             dayLandings, nightLandings,
             durationToString(timeNight),
             durationToString(timeIMC),
