@@ -130,17 +130,17 @@ totalCFILastPage = 0.0
 #[ while currentRowInTable < len(rows):
 
 \noindent\resizebox{\textwidth}{!}{
-    \begin{tabu}{|[1.5pt]m{0.015\textwidth}|l|l|m{0.07\textwidth}|l|m{0.07\textwidth}|m{0.14\textwidth}|m{0.1\textwidth}|m{0.2\textwidth}|l|L{5cm}|l|l|[1.5pt]m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|l|l|l|m{0.08\textwidth}|m{0.25\textwidth}|[1.5pt]}
+    \begin{tabu}{|[1.5pt]m{0.015\textwidth}|l|l|m{0.07\textwidth}|l|m{0.07\textwidth}|m{0.14\textwidth}|m{0.1\textwidth}|m{0.2\textwidth}|l|L{5cm}|l|l|[1.5pt]m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|l|m{0.08\textwidth}|m{0.25\textwidth}|[1.5pt]}
 
 \hiderowcolors
 
 \tabucline[1.5pt]-
-\multirow{3}{*}{No} & 1 & \multicolumn{2}{l|}{2} & \multicolumn{2}{l|}{3} & \multicolumn{2}{l|}{4} & 5 & 6 & 7 & \multicolumn{2}{l|[1.5pt]}{8} & \multicolumn{2}{l|}{9} & \multicolumn{4}{l|}{10} & \multicolumn{3}{l|}{11} & 12 \\
-\cline{2-23}
+\multirow{3}{*}{No} & 1 & \multicolumn{2}{l|}{2} & \multicolumn{2}{l|}{3} & \multicolumn{2}{l|}{4} & 5 & 6 & 7 & \multicolumn{2}{l|[1.5pt]}{8} & \multicolumn{2}{l|}{9} & \multicolumn{4}{l|}{10} & 11 & 12 \\
+\cline{2-21}
 
- & \multirow{2}{*}{DATE} & \multicolumn{2}{l|}{DEPARTURE} & \multicolumn{2}{l|}{ARRIVAL} & \multicolumn{2}{l|}{AIRCRAFT} & \multirow{2}{*}{CATEGORY} & \multirow{2}{0.05\textwidth}{TOTAL TIME OF FLIGHT} & \multirow{2}{*}{NAME(S) PIC} & \multicolumn{2}{l|[1.5pt]}{LANDINGS} & \multicolumn{2}{p{0.1\textwidth}|}{OPERATIONAL CONDITION TIME} & \multicolumn{4}{l|}{PILOT FUNCTION TIME} & \multicolumn{3}{l|}{FSTD SESSION} & \multirow{2}{0.2\textwidth}{REMARKS AND ENDORSEMENTS} \\
-\cline{3-8} \cline{12-22}
- & & PLACE & TIME & PLACE & TIME & MAKE, MODEL, VARIANT & REGISTRATION & & & & DAY & NIGHT & NIGHT & IFR & PIC & SIC & DUAL & CFI & DATE & TYPE & TOTAL TIME OF SESSION & \\
+ & \multirow{2}{*}{DATE} & \multicolumn{2}{l|}{DEPARTURE} & \multicolumn{2}{l|}{ARRIVAL} & \multicolumn{2}{l|}{AIRCRAFT} & \multirow{2}{*}{CATEGORY} & \multirow{2}{0.05\textwidth}{TOTAL TIME OF FLIGHT} & \multirow{2}{*}{NAME(S) PIC} & \multicolumn{2}{l|[1.5pt]}{LANDINGS} & \multicolumn{2}{p{0.1\textwidth}|}{OPERATIONAL CONDITION TIME} & \multicolumn{4}{l|}{PILOT FUNCTION TIME} & FSTD SESSION & \multirow{2}{0.2\textwidth}{REMARKS AND ENDORSEMENTS} \\
+\cline{3-8} \cline{12-20}
+ & & PLACE & TIME & PLACE & TIME & MAKE, MODEL, VARIANT & REGISTRATION & & & & DAY & NIGHT & NIGHT & IFR & PIC & SIC & DUAL & CFI & TOTAL TIME OF SESSION & \\
 
 \showrowcolors
 \tabucline[1.5pt]-
@@ -161,7 +161,7 @@ for i in range(RowsPerPage):
 
     if currentRowInTable >= len(rows):
         # We exceeded the logbook, so print an empty line to fill the table properly
-        _outf.write(u' & & & & & & & & & & & & & & & & & & & & & & \\\\')
+        _outf.write(u' & & & & & & & & & & & & & & & & & & & & \\\\')
     else:
         # The CSV export contains different date formats, so parse them individually
         logDate = datetime.datetime.strptime(rows[currentRowInTable][u'Date'], '%Y-%m-%d').date().isoformat()
@@ -184,6 +184,8 @@ for i in range(RowsPerPage):
         timeSIC       = 0.0 if rows[currentRowInTable][u'SIC'] == u'' else round(locale.atof(rows[currentRowInTable][u'SIC'])*60)/60
         timeDual      = 0.0 if rows[currentRowInTable][u'Dual Received'] == u'' else round(locale.atof(rows[currentRowInTable][u'Dual Received'])*60)/60
         timeCFI       = 0.0 if rows[currentRowInTable][u'CFI'] == u'' else round(locale.atof(rows[currentRowInTable][u'CFI'])*60)/60
+        timeGroundSim = 0.0 if rows[currentRowInTable][u'Ground Simulator'] == u'' else round(locale.atof(rows[currentRowInTable][u'Ground Simulator'])*60)/60
+        timeSimIMC    = 0.0 if rows[currentRowInTable][u'Simulated Instrument'] == u'' else round(locale.atof(rows[currentRowInTable][u'Simulated Instrument'])*60)/60
         flightStart   = rows[currentRowInTable][u'Flight Start'] if rows[currentRowInTable][u'Engine Start'] == u'' else rows[currentRowInTable][u'Engine Start']
         flightEnd     = rows[currentRowInTable][u'Flight End'] if rows[currentRowInTable][u'Engine End'] == u'' else rows[currentRowInTable][u'Engine End']
         nameOfPIC     = rows[currentRowInTable][u'Name of PIC'] if u'Name of PIC' in rows[currentRowInTable].keys() else u''
@@ -223,7 +225,7 @@ for i in range(RowsPerPage):
         totalDualThisPage += timeDual
         totalCFIThisPage += timeCFI
 
-        _outf.write((u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %i & %i & %s & %s & %s & %s & %s & %s & & & & %s %s %s \\\\ ' % (currentRowInTable+1,
+        _outf.write((u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %i & %i & %s & %s & %s & %s & %s & %s & %s & %s %s %s %s \\\\ ' % (currentRowInTable+1,
             logDate,
             departureCode, flightStart,
             arrivalCode, flightEnd,
@@ -239,7 +241,9 @@ for i in range(RowsPerPage):
             durationToString(timeSIC),
             durationToString(timeDual),
             durationToString(timeCFI),
+            durationToString(timeGroundSim),
             rows[currentRowInTable][u'Flight Properties'],
+            '' if timeSimIMC == 0.0 else u'Simulated Instrument: %s' % durationToString(timeSimIMC),
             rows[currentRowInTable][u'Comments'],
             '' if len(route)<=2 else ('Route: ' + rows[currentRowInTable][u'Route']))).encode('utf-8'))
 
@@ -282,7 +286,7 @@ categoryTotalStr = u''
 for category in totalCategoryLastPage:
     categoryTotalStr += u'%s: %i\\newline ' % (category, totalCategoryLastPage[category])
 
-_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & %s & %s & & %i & %i & %s & %s & %s & %s & %s & \\multicolumn{1}{l|[1.5pt]}{%s} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{I certify that the entries in this log are true.}} \\\\' % (
+_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & %s & %s & & %i & %i & %s & %s & %s & %s & %s & \\multicolumn{1}{l|[1.5pt]}{%s} & \\multicolumn{2}{c}{\\cellcolor{white}\\textbf{I certify that the entries in this log are true.}} \\\\' % (
     categoryTotalThisPageStr,
     durationToString(totalFlightTimeThisPage),
     totalDayLandingsThisPage, totalNightLandingsThisPage,
@@ -295,7 +299,7 @@ _outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & 
 
 _outf.write(u'\cline{8-19}')
 
-_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL FROM PREVIOUS PAGES & %s & %s & & %i & %i & %s & %s & %s & %s & %s & \\multicolumn{1}{l|[1.5pt]}{%s} & \\multicolumn{4}{c}{\\cellcolor{white}} \\\\' % (
+_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL FROM PREVIOUS PAGES & %s & %s & & %i & %i & %s & %s & %s & %s & %s & \\multicolumn{1}{l|[1.5pt]}{%s} & \\multicolumn{2}{c}{\\cellcolor{white}} \\\\' % (
     categoryTotalLastPageStr,
     durationToString(totalFlightTimeLastPage),
     totalDayLandingsLastPage, totalNightLandingsLastPage,
@@ -306,9 +310,9 @@ _outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL FROM PREVIOU
     durationToString(totalDualLastPage),
     durationToString(totalCFILastPage)))
 
-_outf.write(u'\cline{8-23}')
+_outf.write(u'\cline{8-21}')
 
-_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL TIMES & %s & %s & & %i & %i & %s & %s & %s & %s & %s & \\multicolumn{1}{l|[1.5pt]}{%s} & \\multicolumn{4}{c}{\\cellcolor{white}\\textbf{PILOT\'S SIGNATURE}} \\\\' % (
+_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL TIMES & %s & %s & & %i & %i & %s & %s & %s & %s & %s & \\multicolumn{1}{l|[1.5pt]}{%s} & \\multicolumn{2}{c}{\\cellcolor{white}\\textbf{PILOT\'S SIGNATURE}} \\\\' % (
     categoryTotalStr,
     durationToString(totalFlightTime),
     totalDayLandings, totalNightLandings,
