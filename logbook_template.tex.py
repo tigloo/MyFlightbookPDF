@@ -3,8 +3,6 @@
 \usepackage{graphicx}
 \usepackage{tabu}
 \usepackage[table,x11names]{xcolor}
-\usepackage{multirow}
-\usepackage{makecell}
 \usepackage{fancyhdr}
 \usepackage{pifont}
 \usepackage{pbox}
