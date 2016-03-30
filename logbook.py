@@ -9,6 +9,7 @@ import datetime
 import math
 import locale
 import argparse
+from collections import Counter
 
 CONF_PILOT_NAME         = u'pilot_name'
 CONF_PILOT_ADDRESS1     = u'pilot_address1'
@@ -27,6 +28,8 @@ def setConfigurationOption(option, value):
 
     # Escape if necessary
     if option in [CONF_PILOT_NAME, CONF_PILOT_ADDRESS1, CONF_PILOT_ADDRESS2, CONF_PILOT_ADDRESS3, CONF_PILOT_LICENSE_NR]:
+        if not isinstance(value, basestring):
+            value = u''
         value = texEscape(value)
 
     CONFIGURATION_OPTIONS[option] = value
@@ -51,9 +54,94 @@ def initConfiguration():
 #
 def durationToString(duration):
     if getConfigurationOption(CONF_FRACTIONS):
-        return u'%.2f' % duration
+        return '%.2f' % duration
     else:
-        return u'%d:%02d' % (math.floor(duration), round(duration*60%60))
+        return '%d:%02d' % (math.floor(duration), round(duration*60%60))
+
+#
+# Initializes a dictionary that stores totals for various categories.
+# These totals are typically summed up per page and per logbook overall.
+# The return value is an initialized dictionary.
+#
+def initTotals():
+    totals = {}
+    totals['category'] = Counter()
+    totals['dayLandings'] = Counter()
+    totals['nightLandings'] = Counter()
+    totals['flightTime'] = Counter()
+    totals['night'] = Counter()
+    totals['imc'] = Counter()
+    totals['pic'] = Counter()
+    totals['sic'] = Counter()
+    totals['dual'] = Counter()
+    totals['cfi'] = Counter()
+
+    return totals
+
+#
+# Takes a storage array initialized by initTotals(), looks up a key to collect
+# totals in identified by totalKey (imc, pic, sic, dual, ...) and adds in the category
+# totalCategory (AMEL, ASEL, ...) the total valueToAdd.
+#
+def addToTotals(storage, totalKey, totalCategory, valueToAdd):
+    tmpStorage = storage
+    tmpStorage[totalKey][totalCategory] += valueToAdd
+    return tmpStorage
+
+#
+# Sums up to totals storage arrays. This is used to compute last page and this page totals.
+# Works through all keys in storage2 and adds them to storage1 if necessary. This means
+# that storage1 and storage2 are not interchangeable parameters!
+# Usage: sumTotals(totalsLastPage, totalsThisPage)
+# Returns: summed up array
+def sumTotals(storage1, storage2):
+    output = storage1
+    for key in storage1:
+        output[key] = storage1[key] + storage2[key]
+
+    return output
+
+#
+# Takes a storage array and a key to collect totals in and returns a formatted string
+# containing all sums per stored category.
+#
+def totalsString(storage, totalKey):
+    categoryTotalStr = u''
+    for category in storage[totalKey]:
+        categoryTotalStr += u'%s: %i\\newline ' % (category, storage[totalKey][category])
+
+    return categoryTotalStr
+
+#
+# Formatter for totalsStringFormatted():
+# Formats a parameter as an integer.
+#
+def formatIntAsString(param):
+    return '%i' % param
+
+#
+# Takes a storage array and a key to collect totals in and returns a formatted string
+# containing all sums per stored category. In contrast to the previous function, this
+# one omits the category itself and uses a user-supplied function to format the output.
+#
+def totalsStringFormatted(storage, totalKey, formatFunction):
+    categoryTotalStr = u''
+
+    for category in storage[totalKey]:
+        categoryTotalStr += u'%s\\newline ' % (formatFunction(storage[totalKey][category]))
+
+    return categoryTotalStr
+
+#
+# Returns a string with all categories separated by linebreaks
+#
+def allCategoriesStr(storage, totalKey):
+    retval = u''
+
+    for category in storage[totalKey]:
+        retval += u'%s\\newline ' % category
+
+    return retval
 
 #
 # Snippet below based on YAPTU, "Yet Another Python Templating Utility, Version 1.2"

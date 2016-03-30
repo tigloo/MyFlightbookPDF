@@ -1,9 +1,10 @@
 \documentclass{article}
 
-%\usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{tabu}
 \usepackage[table,x11names]{xcolor}
+\usepackage{multirow}
+\usepackage{makecell}
 \usepackage{fancyhdr}
 \usepackage{pifont}
 \usepackage{pbox}
@@ -23,6 +24,9 @@
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
 
 \pagestyle{fancy}
 
@@ -115,22 +119,14 @@ RowsPerPage = 12
 
 currentRowInTable = 0
 
-totalCategoryLastPage = {}
-totalDayLandingsLastPage = 0
-totalNightLandingsLastPage = 0
-totalFlightTimeLastPage = 0.0
-totalNightLastPage = 0.0
-totalIMCLastPage = 0.0
-totalPICLastPage = 0.0
-totalSICLastPage = 0.0
-totalDualLastPage = 0.0
-totalCFILastPage = 0.0
+totalsLastPage = initTotals()
+
 #]
 
 #[ while currentRowInTable < len(rows):
 
 \noindent\resizebox{\textwidth}{!}{
-    \begin{tabu}{|[1.5pt]m{0.015\textwidth}|l|l|m{0.07\textwidth}|l|m{0.07\textwidth}|m{0.14\textwidth}|m{0.1\textwidth}|m{0.2\textwidth}|l|L{5cm}|l|l|[1.5pt]m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|l|m{0.08\textwidth}|m{0.25\textwidth}|[1.5pt]}
+    \begin{tabu}{|[1.5pt]m{0.02\textwidth}|l|l|m{0.07\textwidth}|l|m{0.07\textwidth}|m{0.14\textwidth}|m{0.1\textwidth}|m{0.2\textwidth}|m{0.08\textwidth}|L{5cm}|m{0.05\textwidth}|m{0.05\textwidth}|[1.5pt]m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.05\textwidth}|m{0.08\textwidth}|m{0.25\textwidth}|[1.5pt]}
 
 \hiderowcolors
 
@@ -146,16 +142,7 @@ totalCFILastPage = 0.0
 \tabucline[1.5pt]-
 
 #[
-totalCategoryThisPage = {}
-totalDayLandingsThisPage = 0
-totalNightLandingsThisPage = 0
-totalFlightTimeThisPage = 0.0
-totalNightThisPage = 0.0
-totalIMCThisPage = 0.0
-totalPICThisPage = 0.0
-totalSICThisPage = 0.0
-totalDualThisPage = 0.0
-totalCFIThisPage = 0.0
+totalsThisPage = initTotals()
 
 for i in range(RowsPerPage):
 
@@ -165,6 +152,12 @@ for i in range(RowsPerPage):
     else:
         # The CSV export contains different date formats, so parse them individually
         logDate = datetime.datetime.strptime(rows[currentRowInTable][u'Date'], '%Y-%m-%d').date().isoformat()
+
+        #
+        # Remove text in parentheses from category names
+        # Convert: "Helicopter (R22)" to "Helicopter"
+        #
+        cleanCategory = re.sub(r'\([^)]*\)', '', rows[currentRowInTable][u'Category/Class']).strip()
 
         # Replace dashes in route with spaces to be able to work with airport codes separated by either spaces or dashes
         rows[currentRowInTable][u'Route'] = rows[currentRowInTable][u'Route'].replace('-', ' ')
@@ -204,26 +197,16 @@ for i in range(RowsPerPage):
                 dtFlightEnd = datetime.datetime.strptime(flightEnd, '%Y-%m-%d %H:%M:%SZ')
                 flightEnd = dtFlightEnd.time().strftime('%H:%M')
 
-        #
-        # Remove text in parentheses from category names
-        # Convert: "Helicopter (R22)" to "Helicopter"
-        #
-        cleanCategory = re.sub(r'\([^)]*\)', '', rows[currentRowInTable][u'Category/Class']).strip()
-
-        if cleanCategory in totalCategoryThisPage.keys():
-            totalCategoryThisPage[cleanCategory] += 1
-        else:
-            totalCategoryThisPage[cleanCategory] = 1
-
-        totalFlightTimeThisPage += flightTime
-        totalDayLandingsThisPage += dayLandings
-        totalNightLandingsThisPage += nightLandings
-        totalNightThisPage += timeNight
-        totalIMCThisPage += timeIMC
-        totalPICThisPage += timePIC
-        totalSICThisPage += timeSIC
-        totalDualThisPage += timeDual
-        totalCFIThisPage += timeCFI
+        totalsThisPage = addToTotals(totalsThisPage, 'category', cleanCategory, 1)
+        totalsThisPage = addToTotals(totalsThisPage, 'flightTime', cleanCategory, flightTime)
+        totalsThisPage = addToTotals(totalsThisPage, 'dayLandings', cleanCategory, dayLandings)
+        totalsThisPage = addToTotals(totalsThisPage, 'nightLandings', cleanCategory, nightLandings)
+        totalsThisPage = addToTotals(totalsThisPage, 'night', cleanCategory, timeNight)
+        totalsThisPage = addToTotals(totalsThisPage, 'imc', cleanCategory, timeIMC)
+        totalsThisPage = addToTotals(totalsThisPage, 'pic', cleanCategory, timePIC)
+        totalsThisPage = addToTotals(totalsThisPage, 'sic', cleanCategory, timeSIC)
+        totalsThisPage = addToTotals(totalsThisPage, 'dual', cleanCategory, timeDual)
+        totalsThisPage = addToTotals(totalsThisPage, 'cfi', cleanCategory, timeCFI)
 
         _outf.write((u'%i & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %i & %i & %s & %s & %s & %s & %s & %s & %s & %s %s %s %s \\\\ ' % (currentRowInTable+1,
             logDate,
@@ -252,89 +235,56 @@ for i in range(RowsPerPage):
     currentRowInTable += 1
 #]
 
+\hiderowcolors
+
 #[
 
-totalFlightTime = totalFlightTimeThisPage + totalFlightTimeLastPage
-totalDayLandings = totalDayLandingsThisPage + totalDayLandingsLastPage
-totalNightLandings = totalNightLandingsThisPage + totalNightLandingsLastPage
-totalNight = totalNightThisPage + totalNightLastPage
-totalIMC = totalIMCThisPage + totalIMCLastPage
-totalPIC = totalPICThisPage + totalPICLastPage
-totalSIC = totalSICThisPage + totalSICLastPage
-totalDual = totalDualThisPage + totalDualLastPage
-totalCFI = totalCFIThisPage + totalCFILastPage
+_outf.write(u'\multicolumn{6}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & %s & %s & %s & & %s & %s & %s & %s & %s & %s & %s & \\multicolumn{1}{m{0.05\\textwidth}|[1.5pt]}{%s} & \\multicolumn{2}{c}{\\cellcolor{white}\\textbf{I certify that the entries in this log are true.}} \\\\' % (
+    allCategoriesStr(totalsThisPage, 'category'),
+    totalsStringFormatted(totalsThisPage, 'category', formatIntAsString),
+    totalsStringFormatted(totalsThisPage, 'flightTime', durationToString),
+    totalsStringFormatted(totalsThisPage, 'dayLandings', formatIntAsString), totalsStringFormatted(totalsThisPage, 'nightLandings', formatIntAsString),
+    totalsStringFormatted(totalsThisPage, 'night', durationToString),
+    totalsStringFormatted(totalsThisPage, 'imc', durationToString),
+    totalsStringFormatted(totalsThisPage, 'pic', durationToString),
+    totalsStringFormatted(totalsThisPage, 'sic', durationToString),
+    totalsStringFormatted(totalsThisPage, 'dual', durationToString),
+    totalsStringFormatted(totalsThisPage, 'cfi', durationToString)))
 
-#
-# Sum up category totals as separate string
-#
-categoryTotalThisPageStr = u''
-for category in totalCategoryThisPage:
-    categoryTotalThisPageStr += u'%s: %i\\newline ' % (category, totalCategoryThisPage[category])
+_outf.write(u'\cline{7-19}')
 
-categoryTotalLastPageStr = u''
-for category in totalCategoryLastPage:
-    categoryTotalLastPageStr += u'%s: %i\\newline ' % (category, totalCategoryLastPage[category])
+_outf.write(u'\multicolumn{6}{l|[1.5pt]}{\cellcolor{white}} & TOTAL FROM PREVIOUS PAGES & %s & %s & %s & & %s & %s & %s & %s & %s & %s & %s & \\multicolumn{1}{m{0.05\\textwidth}|[1.5pt]}{%s} & \\multicolumn{2}{c}{\\cellcolor{white}} \\\\' % (
+    allCategoriesStr(totalsLastPage, 'category'),
+    totalsStringFormatted(totalsLastPage, 'category', formatIntAsString),
+    totalsStringFormatted(totalsLastPage, 'flightTime', durationToString),
+    totalsStringFormatted(totalsLastPage, 'dayLandings', formatIntAsString), totalsStringFormatted(totalsThisPage, 'nightLandings', formatIntAsString),
+    totalsStringFormatted(totalsLastPage, 'night', durationToString),
+    totalsStringFormatted(totalsLastPage, 'imc', durationToString),
+    totalsStringFormatted(totalsLastPage, 'pic', durationToString),
+    totalsStringFormatted(totalsLastPage, 'sic', durationToString),
+    totalsStringFormatted(totalsLastPage, 'dual', durationToString),
+    totalsStringFormatted(totalsLastPage, 'cfi', durationToString)))
+
+_outf.write(u'\cline{7-21}')
 
 # Compute totals by joining the "this page" and "last page" totals arrays
-for category in totalCategoryThisPage:
-    if category in totalCategoryLastPage.keys():
-        totalCategoryLastPage[category] += totalCategoryThisPage[category]
-    else:
-        totalCategoryLastPage[category] = totalCategoryThisPage[category]
+totalsLastPage = sumTotals(totalsLastPage, totalsThisPage)
 
-categoryTotalStr = u''
-for category in totalCategoryLastPage:
-    categoryTotalStr += u'%s: %i\\newline ' % (category, totalCategoryLastPage[category])
+_outf.write(u'\multicolumn{6}{l|[1.5pt]}{\cellcolor{white}} & TOTAL TIMES & %s & %s & %s & & %s & %s & %s & %s & %s & %s & %s & \\multicolumn{1}{m{0.05\\textwidth}|[1.5pt]}{%s} & \\multicolumn{2}{c}{\\cellcolor{white}\\textbf{PILOT\'S SIGNATURE}} \\\\' % (
+    allCategoriesStr(totalsLastPage, 'category'),
+    totalsStringFormatted(totalsLastPage, 'category', formatIntAsString),
+    totalsStringFormatted(totalsLastPage, 'flightTime', durationToString),
+    totalsStringFormatted(totalsLastPage, 'dayLandings', formatIntAsString), totalsStringFormatted(totalsThisPage, 'nightLandings', formatIntAsString),
+    totalsStringFormatted(totalsLastPage, 'night', durationToString),
+    totalsStringFormatted(totalsLastPage, 'imc', durationToString),
+    totalsStringFormatted(totalsLastPage, 'pic', durationToString),
+    totalsStringFormatted(totalsLastPage, 'sic', durationToString),
+    totalsStringFormatted(totalsLastPage, 'dual', durationToString),
+    totalsStringFormatted(totalsLastPage, 'cfi', durationToString)))
 
-_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL THIS PAGE & %s & %s & & %i & %i & %s & %s & %s & %s & %s & \\multicolumn{1}{l|[1.5pt]}{%s} & \\multicolumn{2}{c}{\\cellcolor{white}\\textbf{I certify that the entries in this log are true.}} \\\\' % (
-    categoryTotalThisPageStr,
-    durationToString(totalFlightTimeThisPage),
-    totalDayLandingsThisPage, totalNightLandingsThisPage,
-    durationToString(totalNightThisPage),
-    durationToString(totalIMCThisPage),
-    durationToString(totalPICThisPage),
-    durationToString(totalSICThisPage),
-    durationToString(totalDualThisPage),
-    durationToString(totalCFIThisPage)))
-
-_outf.write(u'\cline{8-19}')
-
-_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL FROM PREVIOUS PAGES & %s & %s & & %i & %i & %s & %s & %s & %s & %s & \\multicolumn{1}{l|[1.5pt]}{%s} & \\multicolumn{2}{c}{\\cellcolor{white}} \\\\' % (
-    categoryTotalLastPageStr,
-    durationToString(totalFlightTimeLastPage),
-    totalDayLandingsLastPage, totalNightLandingsLastPage,
-    durationToString(totalNightLastPage),
-    durationToString(totalIMCLastPage),
-    durationToString(totalPICLastPage),
-    durationToString(totalSICLastPage),
-    durationToString(totalDualLastPage),
-    durationToString(totalCFILastPage)))
-
-_outf.write(u'\cline{8-21}')
-
-_outf.write(u'\multicolumn{7}{l|[1.5pt]}{\cellcolor{white}} & TOTAL TIMES & %s & %s & & %i & %i & %s & %s & %s & %s & %s & \\multicolumn{1}{l|[1.5pt]}{%s} & \\multicolumn{2}{c}{\\cellcolor{white}\\textbf{PILOT\'S SIGNATURE}} \\\\' % (
-    categoryTotalStr,
-    durationToString(totalFlightTime),
-    totalDayLandings, totalNightLandings,
-    durationToString(totalNight),
-    durationToString(totalIMC),
-    durationToString(totalPIC),
-    durationToString(totalSIC),
-    durationToString(totalDual),
-    durationToString(totalCFI)))
-
-totalFlightTimeLastPage += totalFlightTimeThisPage
-totalDayLandingsLastPage += totalDayLandingsThisPage
-totalNightLandingsLastPage += totalNightLandingsThisPage
-totalNightLastPage += totalNightThisPage
-totalIMCLastPage += totalIMCThisPage
-totalPICLastPage += totalPICThisPage
-totalSICLastPage += totalSICThisPage
-totalDualLastPage += totalDualThisPage
-totalCFILastPage += totalCFIThisPage
 #]
 
-\tabucline[1.5pt]{8-19}
+\tabucline[1.5pt]{7-19}
 
 \end{tabu}
 }
