@@ -96,7 +96,7 @@ def addToTotals(storage, totalKey, totalCategory, valueToAdd):
 # Returns: summed up array
 def sumTotals(storage1, storage2):
     output = storage1
-    for key in storage1:
+    for key in storage2:
         output[key] = storage1[key] + storage2[key]
 
     return output
