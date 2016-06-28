@@ -1,12 +1,15 @@
 if [ ! -d "$OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive" ]; then
+  mkdir $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive
   echo TeXLive: Downloading...
-  curl -L -o $OPENSHIFT_REPO_DIR/texlive.zip https://github.com/tigloo/openshift-origin-cartridge-texlive/archive/master.zip
+  curl -L -o $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive/install-tl-unx.tar.gz http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
   echo TeXLive: Unpacking...
-  pushd $OPENSHIFT_REPO_DIR
-  unzip $OPENSHIFT_REPO_DIR/texlive.zip > /dev/null
-  rm $OPENSHIFT_REPO_DIR/texlive.zip
-  echo TeXLive: Fixing tlmgr backup directory
-  mkdir $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/tlpkg/backups
+  pushd $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive
+  tar zxvf install-tl-unx.tar.gz > /dev/null
+  rm install-tl-unx.tar.gz
+  echo TeXLive: Running installer...
+  */install-tl --profile=$OPENSHIFT_REPO_DIR/.openshift/action_hooks/texlive.profile
+  #echo TeXLive: Fixing tlmgr backup directory
+  #mkdir $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/tlpkg/backups
   echo TeXLive: Switching to nearest CTAN mirror...
   $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/bin/x86_64-linux/tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet
   echo TeXLive: Updating package manager...
