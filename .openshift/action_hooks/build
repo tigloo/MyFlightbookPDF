@@ -1,9 +1,9 @@
-if [ ! -d "$OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive" ]; then
-  mkdir $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive
+if [ ! -d "$OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master" ]; then
+  mkdir $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master
   echo TeXLive: Downloading...
-  curl -L -o $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive/install-tl-unx.tar.gz http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+  curl -L -o $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master/install-tl-unx.tar.gz http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
   echo TeXLive: Unpacking...
-  pushd $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive
+  pushd $OPENSHIFT_REPO_DIR/openshift-origin-cartridge-texlive-master
   tar zxvf install-tl-unx.tar.gz > /dev/null
   rm install-tl-unx.tar.gz
   echo TeXLive: Running installer...
