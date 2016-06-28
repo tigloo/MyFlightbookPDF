@@ -13,20 +13,20 @@ TEXMFVAR $TEXMFSYSVAR
 binary_x86_64-linux 1
 collection-basic 1
 collection-fontsrecommended 1
-collection-langarabic 1
-collection-langcjk 1
-collection-langcyrillic 1
-collection-langczechslovak 1
+collection-langarabic 0
+collection-langcjk 0
+collection-langcyrillic 0
+collection-langczechslovak 0
 collection-langenglish 1
-collection-langeuropean 1
+collection-langeuropean 0
 collection-langfrench 1
 collection-langgerman 1
-collection-langgreek 1
-collection-langindic 1
-collection-langitalian 1
-collection-langpolish 1
-collection-langportuguese 1
-collection-langspanish 1
+collection-langgreek 0
+collection-langindic 0
+collection-langitalian 0
+collection-langpolish 0
+collection-langportuguese 0
+collection-langspanish 0
 collection-latex 1
 collection-luatex 1
 collection-xetex 1
@@ -34,12 +34,12 @@ in_place 0
 option_adjustrepo 1
 option_autobackup 1
 option_backupdir tlpkg/backups
-option_desktop_integration 
+#option_desktop_integration 
 option_doc 1
 option_file_assocs 
 option_fmt 1
 option_letter 0
-option_menu_integration 
+#option_menu_integration 
 option_path 
 option_post_code 1
 option_src 1
